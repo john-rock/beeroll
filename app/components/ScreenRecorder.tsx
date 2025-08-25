@@ -6,7 +6,7 @@ import { downloadBlob, formatDuration, generateFilename, formatFileSize } from '
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
-import { AudioLiveControls } from './AudioLiveControls';
+
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
 import { RecordingPreview } from './RecordingPreview';
@@ -199,14 +199,7 @@ export function ScreenRecorder() {
 
           {(isRecording || isPaused) && (
             <div className="space-y-4">
-              {/* Live Audio Controls */}
-              <AudioLiveControls
-                isMuted={isMuted}
-                onToggleMute={toggleMute}
-                onVolumeChange={setAudioLevel}
-                isRecording={isRecording}
-                className="mx-auto w-fit"
-              />
+
 
               {/* Main Recording Controls */}
               <div className="grid grid-cols-2 gap-3">
