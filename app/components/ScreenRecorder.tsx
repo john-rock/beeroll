@@ -161,7 +161,7 @@ export function ScreenRecorder() {
         <div className="max-w-lg w-full space-y-8 relative">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-6xl font-bold text-black dark:text-white bg-clip-text border-4 rounded-3xl dark:border-white inline-block px-6 pb-3 transition-all duration-300 hover:scale-105">
+            <h1 className="text-6xl font-bold text-black dark:text-white bg-clip-text border-4 rounded-3xl dark:border-white inline-block px-6 pb-3 transition-all duration-300">
               snapp
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed transition-colors duration-300">
@@ -182,7 +182,7 @@ export function ScreenRecorder() {
         )}
 
         {/* Main Controls */}
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 mb-20">
           {isInactive && (
             <button
               onClick={handleStartRecording}
@@ -190,8 +190,8 @@ export function ScreenRecorder() {
               disabled={isProcessing}
             >
               <div className="flex items-center justify-center space-x-3">
-                <Play className="w-6 h-6 group-hover:animate-pulse" fill="currentColor" />
-                <span className="text-xl">Start Recording</span>
+                <Play className="w-5 h-5" />
+                <span className="text-xl font-normal">Start Recording</span>
               </div>
             </button>
           )}
@@ -207,7 +207,7 @@ export function ScreenRecorder() {
                     onClick={pauseRecording}
                     className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
                   >
-                    <Pause className="w-4 h-4" fill="currentColor" />
+                    <Pause className="w-4 h-4"/>
                     <span>Pause</span>
                   </button>
                 )}
