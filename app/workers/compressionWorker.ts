@@ -1,18 +1,17 @@
 // Web Worker for video compression
-import { CompressionSettings } from '../types/recording';
 
 interface CompressionMessage {
   type: 'compress' | 'progress' | 'complete' | 'error';
-  data?: any;
+  data?: unknown;
 }
 
 // Worker message handler
 self.onmessage = async (event: MessageEvent) => {
-  const { type, videoBlob, settings } = event.data;
+  const { type, videoBlob } = event.data;
 
   if (type === 'compress') {
     try {
-      await compressVideo(videoBlob, settings);
+      await compressVideo(videoBlob);
     } catch (error) {
       postMessage({
         type: 'error',
@@ -22,18 +21,18 @@ self.onmessage = async (event: MessageEvent) => {
   }
 };
 
-async function compressVideo(videoBlob: Blob, settings: CompressionSettings) {
+async function compressVideo(videoBlob: Blob) {
   try {
     // Send progress update
     postMessage({ type: 'progress', data: { progress: 0 } });
 
     // Check if WebCodecs API is available for hardware acceleration
     if ('VideoEncoder' in self && 'VideoDecoder' in self) {
-      const compressedBlob = await compressWithWebCodecs(videoBlob, settings);
+      const compressedBlob = await compressWithWebCodecs(videoBlob);
       postMessage({ type: 'complete', data: { blob: compressedBlob } });
     } else {
       // Fallback to basic processing
-      const processedBlob = await basicVideoProcessing(videoBlob, settings);
+      const processedBlob = await basicVideoProcessing(videoBlob);
       postMessage({ type: 'complete', data: { blob: processedBlob } });
     }
   } catch (error) {
@@ -44,7 +43,7 @@ async function compressVideo(videoBlob: Blob, settings: CompressionSettings) {
   }
 }
 
-async function compressWithWebCodecs(videoBlob: Blob, settings: CompressionSettings): Promise<Blob> {
+async function compressWithWebCodecs(videoBlob: Blob): Promise<Blob> {
   // This is a simplified implementation
   // In a real scenario, you'd use VideoEncoder/VideoDecoder APIs
   postMessage({ type: 'progress', data: { progress: 50 } });
@@ -59,7 +58,7 @@ async function compressWithWebCodecs(videoBlob: Blob, settings: CompressionSetti
   return videoBlob;
 }
 
-async function basicVideoProcessing(videoBlob: Blob, settings: CompressionSettings): Promise<Blob> {
+async function basicVideoProcessing(videoBlob: Blob): Promise<Blob> {
   postMessage({ type: 'progress', data: { progress: 25 } });
 
   // Create video element to analyze the content

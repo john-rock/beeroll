@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AudioOptions } from '../types/recording';
 import { getAudioInputDevices, testMicrophoneAccess, AudioDevice } from '../utils/audioDevices';
 import { Volume2, Mic, AlertTriangle } from 'lucide-react';
@@ -16,20 +16,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
   const [microphoneAvailable, setMicrophoneAvailable] = useState(false);
   const [isLoadingDevices, setIsLoadingDevices] = useState(false);
 
-  useEffect(() => {
-    checkMicrophoneAccess();
-  }, []);
-
-  const checkMicrophoneAccess = async () => {
-    const available = await testMicrophoneAccess();
-    setMicrophoneAvailable(available);
-    
-    if (available) {
-      loadAudioDevices();
-    }
-  };
-
-  const loadAudioDevices = async () => {
+  const loadAudioDevices = useCallback(async () => {
     setIsLoadingDevices(true);
     try {
       const devices = await getAudioInputDevices();
@@ -39,7 +26,20 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
     } finally {
       setIsLoadingDevices(false);
     }
-  };
+  }, []);
+
+  const checkMicrophoneAccess = useCallback(async () => {
+    const available = await testMicrophoneAccess();
+    setMicrophoneAvailable(available);
+    
+    if (available) {
+      loadAudioDevices();
+    }
+  }, [loadAudioDevices]);
+
+  useEffect(() => {
+    checkMicrophoneAccess();
+  }, [checkMicrophoneAccess]);
 
   const handleSystemAudioChange = (enabled: boolean) => {
     onAudioOptionsChange({

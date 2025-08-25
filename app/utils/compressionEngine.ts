@@ -131,7 +131,7 @@ export class CompressionEngine {
     });
   }
 
-  private handleWorkerMessage(event: MessageEvent) {
+  private handleWorkerMessage() {
     // This is handled in performCompression
   }
 

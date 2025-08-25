@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useScreenRecording } from '../hooks/useScreenRecording';
 import { useKeyboardShortcut } from '../hooks/useKeyboardShortcuts';
-import { downloadBlob, formatDuration, generateFilename, formatFileSize } from '../utils/fileDownload';
+import { downloadBlob, generateFilename, formatFileSize } from '../utils/fileDownload';
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
-import { Play, ChevronDown, Pause, RotateCw, Save, Settings, Zap, Keyboard } from 'lucide-react';
+import { Play, ChevronDown, Pause, RotateCw, Save, Settings, Zap } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';

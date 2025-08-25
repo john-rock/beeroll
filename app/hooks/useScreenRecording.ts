@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { RecordingOptions, RecordingState, RecordingStatus, AudioOptions } from '../types/recording';
+import { RecordingOptions, RecordingState, RecordingStatus } from '../types/recording';
 import { getQualityConfig } from '../utils/qualitySettings';
 import { getMixedAudioStream } from '../utils/audioDevices';
 import { RecordingErrorHandler, RecordingError } from '../utils/errorHandling';
@@ -17,6 +17,7 @@ export function useScreenRecording() {
   const chunksRef = useRef<Blob[]>([]);
   const startTimeRef = useRef<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const stopRecordingRef = useRef<(() => Promise<Blob>) | null>(null);
 
   const updateTimer = useCallback(() => {
     if (startTimeRef.current) {
@@ -109,15 +110,15 @@ export function useScreenRecording() {
       };
 
       mediaRecorder.onerror = (event) => {
-        const recordingError = RecordingErrorHandler.handleError((event as any).error || new Error('Recording failed'));
+        const recordingError = RecordingErrorHandler.handleError((event as ErrorEvent).error || new Error('Recording failed'));
         setError(recordingError);
         setRecordingState('inactive');
       };
 
       // Handle stream ending (user stops sharing)
       stream.getVideoTracks()[0].addEventListener('ended', () => {
-        if (mediaRecorder.state === 'recording') {
-          stopRecording();
+        if (mediaRecorder.state === 'recording' && stopRecordingRef.current) {
+          stopRecordingRef.current();
         }
       });
 
@@ -156,6 +157,9 @@ export function useScreenRecording() {
       mediaRecorder.stop();
     });
   }, []);
+
+  // Update the ref whenever stopRecording changes
+  stopRecordingRef.current = stopRecording;
 
   const pauseRecording = useCallback(() => {
     const mediaRecorder = mediaRecorderRef.current;
