@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ThemeToggle } from "./components/ThemeToggle";
+import PlausibleProvider from 'next-plausible'
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -56,10 +57,12 @@ export default function RootLayout({
         className={`${outfit.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider>
-          {children}
-          <ThemeToggle />
-        </ThemeProvider>
+        <PlausibleProvider domain="beeroll.com" trackFileDownloads taggedEvents>
+          <ThemeProvider>
+            {children}
+            <ThemeToggle />
+          </ThemeProvider>
+        </PlausibleProvider>
       </body>
     </html>
   );
