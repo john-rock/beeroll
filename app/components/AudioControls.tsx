@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { AudioOptions } from '../types/recording';
 import { getAudioInputDevices, testMicrophoneAccess, AudioDevice } from '../utils/audioDevices';
+import { Volume2, Mic, AlertTriangle } from 'lucide-react';
 
 interface AudioControlsProps {
   audioOptions: AudioOptions;
@@ -78,9 +79,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
             className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
           />
           <label htmlFor="system-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.82L4.5 14H2a1 1 0 01-1-1V7a1 1 0 011-1h2.5l3.883-2.82a1 1 0 011.0 0zm5.234 2.924A5.978 5.978 0 0118 11a5.978 5.978 0 01-3.383 5.001 1 1 0 11-.79-1.836A3.982 3.982 0 0016 11a3.982 3.982 0 00-2.173-3.165 1 1 0 01.79-1.835z" clipRule="evenodd" />
-            </svg>
+            <Volume2 className="w-4 h-4" />
             <span>System Audio</span>
           </label>
         </div>
@@ -96,9 +95,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
             className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 disabled:opacity-50"
           />
           <label htmlFor="microphone-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
-            </svg>
+            <Mic className="w-4 h-4" />
             <span>Microphone{!microphoneAvailable ? ' (Not Available)' : ''}</span>
           </label>
         </div>
@@ -135,9 +132,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
         {!audioOptions.system && !audioOptions.microphone && (
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3">
             <div className="flex items-center space-x-2">
-              <svg className="w-4 h-4 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
+              <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
               <span className="text-sm text-yellow-700 dark:text-yellow-300">
                 No audio sources selected. Recording will be silent.
               </span>

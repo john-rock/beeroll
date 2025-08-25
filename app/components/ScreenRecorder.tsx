@@ -6,6 +6,7 @@ import { downloadBlob, formatDuration, generateFilename, formatFileSize } from '
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
+import { Play, Pause, Square, Check, AlertTriangle, Settings, ChevronDown, LayoutGrid } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -160,11 +161,11 @@ export function ScreenRecorder() {
         <div className="max-w-lg w-full space-y-8 relative">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent border-2 border-gray-300 dark:border-gray-600 inline-block px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105">
-              recora
+            <h1 className="text-6xl font-bold text-black dark:text-white bg-clip-text border-4 rounded-3xl dark:border-white inline-block px-6 pb-3 transition-all duration-300 hover:scale-105">
+              snapp
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed transition-colors duration-300">
-              Screen recordings made simple: Record. Download. Done.
+            Local first screen recording. No cloud, no upload, no BS.
             </p>
           </div>
 
@@ -185,7 +186,7 @@ export function ScreenRecorder() {
           {isInactive && (
             <button
               onClick={handleStartRecording}
-              className="group w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white font-bold py-6 px-8 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="group w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white font-bold py-6 px-8 rounded-xl transition-all duration-300 transform hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               disabled={isProcessing}
             >
               <div className="flex items-center justify-center space-x-3">
@@ -406,13 +407,9 @@ export function ScreenRecorder() {
                   </svg>
                   <span className="text-lg font-semibold text-gray-900 dark:text-white">Advanced Settings</span>
                 </div>
-                <svg 
-                  className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`} 
-                  fill="currentColor" 
-                  viewBox="0 0 20 20"
-                >
-                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
+                <ChevronDown 
+                  className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`}
+                />
               </button>
               
               {showAdvancedSettings && (

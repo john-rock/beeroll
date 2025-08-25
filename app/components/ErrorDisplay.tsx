@@ -1,6 +1,7 @@
 'use client';
 
 import { RecordingError, RecordingErrorType } from '../utils/errorHandling';
+import { Key, Maximize, Image, AlertCircle, X } from 'lucide-react';
 
 interface ErrorDisplayProps {
   error: RecordingError | null;
@@ -16,27 +17,19 @@ export function ErrorDisplay({ error, onRetry, onDismiss, className = '' }: Erro
     switch (type) {
       case RecordingErrorType.PERMISSION_DENIED:
         return (
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clipRule="evenodd" />
-          </svg>
+          <Key className="w-6 h-6" />
         );
       case RecordingErrorType.NOT_SUPPORTED:
         return (
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15.586 13H14a1 1 0 01-1-1z" clipRule="evenodd" />
-          </svg>
+          <Maximize className="w-6 h-6" />
         );
       case RecordingErrorType.NO_DEVICES:
         return (
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
-          </svg>
+          <Image className="w-6 h-6" />
         );
       default:
         return (
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
+          <AlertCircle className="w-6 h-6" />
         );
     }
   };
@@ -105,9 +98,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss, className = '' }: Erro
               onClick={onDismiss}
               className={`${iconClass} hover:opacity-75 transition-opacity`}
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+              <X className="w-4 h-4" />
             </button>
           )}
         </div>
