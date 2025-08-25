@@ -176,17 +176,10 @@ export function ScreenRecorder() {
           {isInactive && (
             <button
               onClick={handleStartRecording}
-              className="group w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="group w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-3 "
               disabled={isProcessing}
             >
-              <div className="relative">
-                <svg className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 2h6v4H7V5zm8 8v2h1v-2h-1zM6 15h8v-2H6v2z" clipRule="evenodd" />
-                </svg>
-                <div className="absolute inset-0 w-6 h-6 bg-white rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-              </div>
               <span className="text-lg">Start Recording</span>
-              <div className="w-2 h-2 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           )}
 
@@ -360,7 +353,7 @@ export function ScreenRecorder() {
 
             {/* Compression Settings */}
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Compression</h3>
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Compression</h3>
               <div className="flex items-center space-x-3">
                 <input
                   type="checkbox"
@@ -369,7 +362,7 @@ export function ScreenRecorder() {
                   onChange={(e) => setUseCompression(e.target.checked)}
                   className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
                 />
-                <label htmlFor="enable-compression" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2">
+                <label htmlFor="enable-compression" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
                   </svg>

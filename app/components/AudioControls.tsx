@@ -65,7 +65,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
   return (
     <div className="space-y-4">
       <div className="space-y-3">
-        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Audio Sources</h3>
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Audio Sources</h3>
         
         {/* System Audio */}
         <div className="flex items-center space-x-3">
@@ -77,7 +77,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
             disabled={disabled}
             className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
           />
-          <label htmlFor="system-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2">
+          <label htmlFor="system-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.82L4.5 14H2a1 1 0 01-1-1V7a1 1 0 011-1h2.5l3.883-2.82a1 1 0 011.0 0zm5.234 2.924A5.978 5.978 0 0118 11a5.978 5.978 0 01-3.383 5.001 1 1 0 11-.79-1.836A3.982 3.982 0 0016 11a3.982 3.982 0 00-2.173-3.165 1 1 0 01.79-1.835z" clipRule="evenodd" />
             </svg>
@@ -95,7 +95,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
             disabled={disabled || !microphoneAvailable}
             className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 disabled:opacity-50"
           />
-          <label htmlFor="microphone-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2">
+          <label htmlFor="microphone-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
             </svg>
@@ -106,14 +106,14 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
         {/* Microphone Device Selection */}
         {audioOptions.microphone && microphoneAvailable && audioDevices.length > 0 && (
           <div className="ml-7 space-y-2">
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400">
+            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors duration-300">
               Microphone Device
             </label>
             <select
               value={audioOptions.deviceId || ''}
               onChange={(e) => handleDeviceChange(e.target.value)}
               disabled={disabled || isLoadingDevices}
-              className="w-full text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+              className="w-full text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 transition-colors duration-300"
             >
               {audioDevices.map((device) => (
                 <option key={device.deviceId} value={device.deviceId}>
