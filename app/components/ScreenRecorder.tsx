@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useScreenRecording } from '../hooks/useScreenRecording';
 import { downloadBlob, formatDuration, generateFilename } from '../utils/fileDownload';
+import { QualityPreset } from '../types/recording';
+import { QUALITY_PRESETS } from '../utils/qualitySettings';
 
 export function ScreenRecorder() {
   const {
@@ -16,10 +18,11 @@ export function ScreenRecorder() {
   } = useScreenRecording();
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedQuality, setSelectedQuality] = useState<QualityPreset>('balanced');
 
   const handleStartRecording = async () => {
     try {
-      await startRecording({ audio: true, video: true });
+      await startRecording({ audio: true, video: true, quality: selectedQuality });
     } catch (err) {
       console.error('Failed to start recording:', err);
     }
@@ -29,7 +32,6 @@ export function ScreenRecorder() {
     try {
       setIsProcessing(true);
       const blob = await stopRecording();
-      console.log('Received blob for download:', blob.size, 'bytes, type:', blob.type);
       const filename = generateFilename(blob.type);
       downloadBlob(blob, filename);
     } catch (err) {
@@ -147,6 +149,31 @@ export function ScreenRecorder() {
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
               <span className="text-red-300 text-sm">{error}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Quality Selector */}
+        {isInactive && (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">
+                Recording Quality
+              </label>
+              <select
+                value={selectedQuality}
+                onChange={(e) => setSelectedQuality(e.target.value as QualityPreset)}
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
+                  <option key={key} value={key}>
+                    {key === 'high' && '🎯 '}
+                    {key === 'balanced' && '⚖️ '}
+                    {key === 'compressed' && '📦 '}
+                    {config.description}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         )}

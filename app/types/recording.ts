@@ -1,6 +1,9 @@
+export type QualityPreset = 'high' | 'balanced' | 'compressed';
+
 export interface RecordingOptions {
   audio: boolean;
   video: boolean;
+  quality?: QualityPreset;
   mimeType?: string;
   videoBitsPerSecond?: number;
   audioBitsPerSecond?: number;

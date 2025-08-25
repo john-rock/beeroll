@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { RecordingOptions, RecordingState, RecordingStatus } from '../types/recording';
+import { getQualityConfig } from '../utils/qualitySettings';
 
 export function useScreenRecording() {
   const [recordingState, setRecordingState] = useState<RecordingState>('inactive');
@@ -20,16 +21,19 @@ export function useScreenRecording() {
     }
   }, []);
 
-  const startRecording = useCallback(async (options: RecordingOptions = { audio: true, video: true }) => {
+  const startRecording = useCallback(async (options: RecordingOptions = { audio: true, video: true, quality: 'balanced' }) => {
     try {
       setError(null);
       
-      // Request screen capture
+      // Get quality configuration
+      const qualityConfig = getQualityConfig(options.quality || 'balanced');
+      
+      // Request screen capture with quality-based settings
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: {
-          frameRate: { ideal: 30, max: 30 },
-          width: { max: 1920 },
-          height: { max: 1080 }
+          frameRate: { ideal: qualityConfig.frameRate, max: qualityConfig.frameRate },
+          width: { max: qualityConfig.width },
+          height: { max: qualityConfig.height }
         },
         audio: options.audio
       });
@@ -59,14 +63,13 @@ export function useScreenRecording() {
       
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType,
-        videoBitsPerSecond: 2500000, // 2.5 Mbps for better compatibility
-        audioBitsPerSecond: 128000,  // 128 kbps for audio
+        videoBitsPerSecond: qualityConfig.videoBitsPerSecond,
+        audioBitsPerSecond: qualityConfig.audioBitsPerSecond,
       });
 
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = (event) => {
-        console.log('Data available:', event.data.size, 'bytes');
         if (event.data.size > 0) {
           chunksRef.current.push(event.data);
         }
@@ -101,9 +104,6 @@ export function useScreenRecording() {
         }
       });
 
-      console.log('Starting recording with MIME type:', mimeType);
-      console.log('Stream tracks:', stream.getTracks().map(t => ({ kind: t.kind, enabled: t.enabled, readyState: t.readyState })));
-      
       mediaRecorder.start(1000); // Collect data every second
       
     } catch (err) {
@@ -122,15 +122,9 @@ export function useScreenRecording() {
       }
 
       mediaRecorder.onstop = () => {
-        console.log('Recording stopped. Chunks collected:', chunksRef.current.length);
-        console.log('Total size:', chunksRef.current.reduce((total, chunk) => total + chunk.size, 0), 'bytes');
-        
         const blob = new Blob(chunksRef.current, { 
           type: mediaRecorder.mimeType || 'video/webm' 
         });
-        
-        console.log('Final blob size:', blob.size, 'bytes');
-        console.log('Final blob type:', blob.type);
         
         // Clean up
         if (streamRef.current) {
