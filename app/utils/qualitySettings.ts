@@ -36,6 +36,74 @@ export const QUALITY_PRESETS: Record<QualityPreset, QualityConfig> = {
   }
 };
 
+// Local storage key for quality preset
+const QUALITY_PRESET_STORAGE_KEY = 'recora-quality-preset';
+
+// Default quality preset
+const DEFAULT_QUALITY_PRESET: QualityPreset = 'balanced';
+
+/**
+ * Get the quality configuration for a given preset
+ */
 export function getQualityConfig(preset: QualityPreset): QualityConfig {
   return QUALITY_PRESETS[preset];
+}
+
+/**
+ * Save the user's quality preset selection to local storage
+ */
+export function saveQualityPreset(preset: QualityPreset): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(QUALITY_PRESET_STORAGE_KEY, preset);
+    }
+  } catch (error) {
+    console.warn('Failed to save quality preset to local storage:', error);
+  }
+}
+
+/**
+ * Retrieve the user's saved quality preset from local storage
+ * Returns the default preset if none is saved or if local storage is unavailable
+ */
+export function getSavedQualityPreset(): QualityPreset {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const saved = localStorage.getItem(QUALITY_PRESET_STORAGE_KEY);
+      if (saved && isValidQualityPreset(saved)) {
+        return saved as QualityPreset;
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to retrieve quality preset from local storage:', error);
+  }
+  return DEFAULT_QUALITY_PRESET;
+}
+
+/**
+ * Clear the saved quality preset from local storage
+ */
+export function clearSavedQualityPreset(): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem(QUALITY_PRESET_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.warn('Failed to clear quality preset from local storage:', error);
+  }
+}
+
+/**
+ * Check if a string is a valid quality preset
+ */
+function isValidQualityPreset(value: string): value is QualityPreset {
+  return ['high', 'balanced', 'compressed'].includes(value);
+}
+
+/**
+ * Get the quality configuration for the user's saved preset
+ */
+export function getSavedQualityConfig(): QualityConfig {
+  const preset = getSavedQualityPreset();
+  return getQualityConfig(preset);
 }

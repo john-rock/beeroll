@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useScreenRecording } from '../hooks/useScreenRecording';
 import { downloadBlob, formatDuration, generateFilename } from '../utils/fileDownload';
 import { QualityPreset } from '../types/recording';
-import { QUALITY_PRESETS } from '../utils/qualitySettings';
+import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 
 export function ScreenRecorder() {
   const {
@@ -19,6 +19,12 @@ export function ScreenRecorder() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState<QualityPreset>('balanced');
+
+  // Initialize quality setting from local storage
+  useEffect(() => {
+    const savedQuality = getSavedQualityPreset();
+    setSelectedQuality(savedQuality);
+  }, []);
 
   const handleStartRecording = async () => {
     try {
@@ -162,7 +168,11 @@ export function ScreenRecorder() {
               </label>
               <select
                 value={selectedQuality}
-                onChange={(e) => setSelectedQuality(e.target.value as QualityPreset)}
+                onChange={(e) => {
+                  const newQuality = e.target.value as QualityPreset;
+                  setSelectedQuality(newQuality);
+                  saveQualityPreset(newQuality);
+                }}
                 className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
