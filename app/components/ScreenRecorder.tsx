@@ -56,8 +56,8 @@ export function ScreenRecorder() {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white mb-2">Recora</h1>
-          <p className="text-gray-400">Instant screen recording</p>
+          <h1 className="text-5xl text-white mb-2 border-2 border-white inline-block px-4 pb-2 rounded-lg">recora</h1>
+          <p className="text-gray-400">Screen recordings made simple: Record. Download. Done.</p>
         </div>
 
         {/* Recording Status */}
