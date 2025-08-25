@@ -52,12 +52,12 @@ export function ScreenRecorder() {
   const isInactive = recordingState === 'inactive';
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-8 transition-colors duration-300">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-5xl text-white mb-2 border-2 border-white inline-block px-4 pb-2 rounded-lg">recora</h1>
-          <p className="text-gray-400">Screen recordings made simple: Record. Download. Done.</p>
+          <h1 className="text-5xl text-gray-900 dark:text-white mb-2 border-2 border-gray-900 dark:border-white inline-block px-4 pb-2 rounded-lg transition-colors duration-300">recora</h1>
+          <p className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Screen recordings made simple: Record. Download. Done.</p>
         </div>
 
         {/* Recording Status */}
@@ -77,7 +77,7 @@ export function ScreenRecorder() {
           )}
 
           {(isRecording || isPaused) && (
-            <div className="text-2xl font-mono text-white mb-6">
+            <div className="text-2xl font-mono text-gray-900 dark:text-white mb-6 transition-colors duration-300">
               {formatDuration(duration)}
             </div>
           )}
@@ -149,12 +149,12 @@ export function ScreenRecorder() {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-900/50 border border-red-700 rounded-lg p-4">
+          <div className="bg-red-100 dark:bg-red-900/50 border border-red-300 dark:border-red-700 rounded-lg p-4 transition-colors duration-300">
             <div className="flex items-center space-x-2">
-              <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span className="text-red-300 text-sm">{error}</span>
+              <span className="text-red-700 dark:text-red-300 text-sm">{error}</span>
             </div>
           </div>
         )}
@@ -163,7 +163,7 @@ export function ScreenRecorder() {
         {isInactive && (
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
                 Recording Quality
               </label>
               <select
@@ -173,7 +173,7 @@ export function ScreenRecorder() {
                   setSelectedQuality(newQuality);
                   saveQualityPreset(newQuality);
                 }}
-                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
               >
                 {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
                   <option key={key} value={key}>
@@ -188,10 +188,10 @@ export function ScreenRecorder() {
         {/* Instructions */}
         {isInactive && (
           <div className="text-center space-y-2">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-600 dark:text-gray-400 text-sm transition-colors duration-300">
               Click "Start Recording" to capture your screen
             </p>
-            <p className="text-gray-500 text-xs">
+            <p className="text-gray-500 dark:text-gray-500 text-xs transition-colors duration-300">
               Your browser will ask which screen or window to record
             </p>
           </div>
