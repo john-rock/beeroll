@@ -29,7 +29,8 @@ export function ScreenRecorder() {
     try {
       setIsProcessing(true);
       const blob = await stopRecording();
-      const filename = generateFilename('mp4');
+      console.log('Received blob for download:', blob.size, 'bytes, type:', blob.type);
+      const filename = generateFilename(blob.type);
       downloadBlob(blob, filename);
     } catch (err) {
       console.error('Failed to stop recording:', err);

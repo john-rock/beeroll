@@ -27,29 +27,46 @@ export function useScreenRecording() {
       // Request screen capture
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: {
-          mediaSource: 'screen',
-          frameRate: 30,
-          cursor: 'always'
-        } as MediaTrackConstraints,
+          frameRate: { ideal: 30, max: 30 },
+          width: { max: 1920 },
+          height: { max: 1080 }
+        },
         audio: options.audio
       });
 
       streamRef.current = stream;
       chunksRef.current = [];
 
-      // Set up MediaRecorder
-      const mimeType = MediaRecorder.isTypeSupported('video/mp4') 
-        ? 'video/mp4' 
-        : 'video/webm';
+      // Set up MediaRecorder with proper MIME type
+      let mimeType = '';
+      const supportedTypes = [
+        'video/webm;codecs=vp9',
+        'video/webm;codecs=vp8',
+        'video/webm',
+        'video/mp4'
+      ];
+      
+      for (const type of supportedTypes) {
+        if (MediaRecorder.isTypeSupported(type)) {
+          mimeType = type;
+          break;
+        }
+      }
+      
+      if (!mimeType) {
+        throw new Error('No supported video format found');
+      }
       
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType,
-        videoBitsPerSecond: 4000000, // 4 Mbps for balanced quality
+        videoBitsPerSecond: 2500000, // 2.5 Mbps for better compatibility
+        audioBitsPerSecond: 128000,  // 128 kbps for audio
       });
 
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = (event) => {
+        console.log('Data available:', event.data.size, 'bytes');
         if (event.data.size > 0) {
           chunksRef.current.push(event.data);
         }
@@ -84,6 +101,9 @@ export function useScreenRecording() {
         }
       });
 
+      console.log('Starting recording with MIME type:', mimeType);
+      console.log('Stream tracks:', stream.getTracks().map(t => ({ kind: t.kind, enabled: t.enabled, readyState: t.readyState })));
+      
       mediaRecorder.start(1000); // Collect data every second
       
     } catch (err) {
@@ -102,9 +122,15 @@ export function useScreenRecording() {
       }
 
       mediaRecorder.onstop = () => {
+        console.log('Recording stopped. Chunks collected:', chunksRef.current.length);
+        console.log('Total size:', chunksRef.current.reduce((total, chunk) => total + chunk.size, 0), 'bytes');
+        
         const blob = new Blob(chunksRef.current, { 
-          type: mediaRecorder.mimeType || 'video/mp4' 
+          type: mediaRecorder.mimeType || 'video/webm' 
         });
+        
+        console.log('Final blob size:', blob.size, 'bytes');
+        console.log('Final blob type:', blob.type);
         
         // Clean up
         if (streamRef.current) {

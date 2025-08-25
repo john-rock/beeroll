@@ -31,11 +31,19 @@ export function formatFileSize(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-export function generateFilename(extension: string = 'mp4'): string {
+export function generateFilename(mimeType: string = 'video/mp4'): string {
   const timestamp = new Date().toISOString()
     .replace(/[:.]/g, '-')
     .replace('T', '_')
     .slice(0, -5); // Remove milliseconds and Z
+  
+  // Determine extension from MIME type
+  let extension = 'mp4';
+  if (mimeType.includes('webm')) {
+    extension = 'webm';
+  } else if (mimeType.includes('mp4')) {
+    extension = 'mp4';
+  }
     
   return `screen-recording_${timestamp}.${extension}`;
 }
