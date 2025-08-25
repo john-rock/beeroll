@@ -41,7 +41,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss, className = '' }: Erro
       case RecordingErrorType.NOT_SUPPORTED:
         return 'red';
       case RecordingErrorType.COMPRESSION_FAILED:
-        return 'blue';
+        return 'indigo';
       default:
         return 'red';
     }

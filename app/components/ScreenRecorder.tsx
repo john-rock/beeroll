@@ -20,15 +20,11 @@ export function ScreenRecorder() {
     recordingState,
     duration,
     error,
-    stream,
-    isMuted,
     startRecording,
     stopRecording,
     pauseRecording,
     resumeRecording,
     clearError,
-    toggleMute,
-    setAudioLevel,
   } = useScreenRecording();
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -194,7 +190,7 @@ export function ScreenRecorder() {
           {isInactive && (
             <button
               onClick={handleStartRecording}
-              className="group w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white font-bold py-6 px-8 rounded-xl transition-all duration-300 transform hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-xl transition-all duration-300 transform hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               disabled={isProcessing}
             >
               <div className="flex items-center justify-center space-x-3">
@@ -266,27 +262,27 @@ export function ScreenRecorder() {
 
         {/* Compression Progress */}
         {compressionProgress && (
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-6 shadow-lg transition-all duration-300">
+          <div className="bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-xl p-6 shadow-lg transition-all duration-300">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-blue-700 dark:text-blue-300 font-semibold">
+                  <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-indigo-700 dark:text-indigo-300 font-semibold">
                     {compressionProgress.stage}
                   </span>
                 </div>
-                <span className="text-blue-600 dark:text-blue-400 text-lg font-bold">
+                <span className="text-indigo-600 dark:text-indigo-400 text-lg font-bold">
                   {Math.round(compressionProgress.progress)}%
                 </span>
               </div>
               <div className="space-y-2">
-                <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-3 shadow-inner">
+                <div className="w-full bg-indigo-200 dark:bg-indigo-800 rounded-full h-3 shadow-inner">
                   <div 
-                    className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
+                    className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
                     style={{ width: `${compressionProgress.progress}%` }}
                   />
                 </div>
-                <p className="text-blue-600 dark:text-blue-400 text-sm text-center">
+                <p className="text-indigo-600 dark:text-indigo-400 text-sm text-center">
                   Optimizing your recording for the best quality and file size...
                 </p>
               </div>
@@ -385,7 +381,7 @@ export function ScreenRecorder() {
                     setSelectedQuality(newQuality);
                     saveQualityPreset(newQuality);
                   }}
-                  className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-400"
+                className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all duration-300 hover:border-indigo-600"
                 >
                   {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
                     <option key={key} value={key}>
@@ -423,9 +419,6 @@ export function ScreenRecorder() {
                   {/* Compression Settings */}
                   <div className="space-y-4">
                     <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 flex items-center space-x-2">
-                      <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clipRule="evenodd" />
-                      </svg>
                       <span>Compression</span>
                     </h4>
                     <div className="flex items-start space-x-3">
@@ -434,7 +427,7 @@ export function ScreenRecorder() {
                         id="enable-compression"
                         checked={useCompression}
                         onChange={(e) => setUseCompression(e.target.checked)}
-                        className="w-5 h-5 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 mt-0.5"
+                        className="w-4 h-4 text-indigo-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded mt-1.5"
                       />
                       <div className="flex-1">
                         <label htmlFor="enable-compression" className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300 cursor-pointer">

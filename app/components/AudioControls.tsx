@@ -76,7 +76,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
             checked={audioOptions.system}
             onChange={(e) => handleSystemAudioChange(e.target.checked)}
             disabled={disabled}
-            className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+            className="w-4 h-4 text-indigo-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded"
           />
           <label htmlFor="system-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300">
             <Volume2 className="w-4 h-4" />
@@ -92,7 +92,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
             checked={audioOptions.microphone}
             onChange={(e) => handleMicrophoneChange(e.target.checked)}
             disabled={disabled || !microphoneAvailable}
-            className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 disabled:opacity-50"
+            className="w-4 h-4 text-indigo-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded disabled:opacity-50"
           />
           <label htmlFor="microphone-audio" className="text-sm text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300">
             <Mic className="w-4 h-4" />
@@ -110,7 +110,7 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
               value={audioOptions.deviceId || ''}
               onChange={(e) => handleDeviceChange(e.target.value)}
               disabled={disabled || isLoadingDevices}
-              className="w-full text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 transition-colors duration-300"
+              className="w-full text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-600 disabled:opacity-50 transition-colors duration-300"
             >
               {audioDevices.map((device) => (
                 <option key={device.deviceId} value={device.deviceId}>
