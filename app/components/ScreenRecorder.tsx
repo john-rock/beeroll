@@ -444,19 +444,6 @@ export function ScreenRecorder() {
             </div>
           </div>
         )}
-
-        {/* Instructions */}
-        {isInactive && (
-          <div className="text-center space-y-3">
-            <p className="text-gray-600 dark:text-gray-400 text-sm transition-colors duration-300">
-              Click "Start Recording" to capture your screen
-            </p>
-
-            <p className="text-gray-500 dark:text-gray-500 text-xs transition-colors duration-300">
-              Your browser will ask which screen or window to record
-            </p>
-          </div>
-        )}
         </div>
       )}
     </div>
