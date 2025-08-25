@@ -1,7 +1,13 @@
 export type QualityPreset = 'high' | 'balanced' | 'compressed';
 
+export interface AudioOptions {
+  system: boolean;      // System/desktop audio
+  microphone: boolean;  // Microphone input
+  deviceId?: string;    // Specific microphone device
+}
+
 export interface RecordingOptions {
-  audio: boolean;
+  audio: boolean | AudioOptions;
   video: boolean;
   quality?: QualityPreset;
   mimeType?: string;

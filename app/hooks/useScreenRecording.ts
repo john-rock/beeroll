@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { RecordingOptions, RecordingState, RecordingStatus } from '../types/recording';
+import { RecordingOptions, RecordingState, RecordingStatus, AudioOptions } from '../types/recording';
 import { getQualityConfig } from '../utils/qualitySettings';
+import { getMixedAudioStream } from '../utils/audioDevices';
+import { RecordingErrorHandler, RecordingError } from '../utils/errorHandling';
 
 export function useScreenRecording() {
   const [recordingState, setRecordingState] = useState<RecordingState>('inactive');
   const [duration, setDuration] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<RecordingError | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -28,15 +31,28 @@ export function useScreenRecording() {
       // Get quality configuration
       const qualityConfig = getQualityConfig(options.quality || 'balanced');
       
+      // Determine audio configuration
+      const audioOptions = typeof options.audio === 'object' ? options.audio : { system: !!options.audio, microphone: false };
+      
       // Request screen capture with quality-based settings
-      const stream = await navigator.mediaDevices.getDisplayMedia({
+      let stream = await navigator.mediaDevices.getDisplayMedia({
         video: {
           frameRate: { ideal: qualityConfig.frameRate, max: qualityConfig.frameRate },
           width: { max: qualityConfig.width },
           height: { max: qualityConfig.height }
         },
-        audio: options.audio
+        audio: audioOptions.system
       });
+
+      // If microphone is requested, mix it with the screen audio
+      if (audioOptions.microphone && typeof options.audio === 'object') {
+        try {
+          stream = await getMixedAudioStream(stream, audioOptions.deviceId);
+        } catch (err) {
+          console.warn('Failed to add microphone audio:', err);
+          // Continue with just screen audio
+        }
+      }
 
       streamRef.current = stream;
       chunksRef.current = [];
@@ -93,7 +109,8 @@ export function useScreenRecording() {
       };
 
       mediaRecorder.onerror = (event) => {
-        setError('Recording failed: ' + (event as any).error?.message || 'Unknown error');
+        const recordingError = RecordingErrorHandler.handleError((event as any).error || new Error('Recording failed'));
+        setError(recordingError);
         setRecordingState('inactive');
       };
 
@@ -107,8 +124,8 @@ export function useScreenRecording() {
       mediaRecorder.start(1000); // Collect data every second
       
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to start recording';
-      setError(errorMessage);
+      const recordingError = RecordingErrorHandler.handleError(err);
+      setError(recordingError);
       setRecordingState('inactive');
     }
   }, [updateTimer]);
@@ -168,14 +185,47 @@ export function useScreenRecording() {
     startTime: startTimeRef.current,
   }), [recordingState, duration]);
 
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    if (streamRef.current) {
+      const audioTracks = streamRef.current.getAudioTracks();
+      audioTracks.forEach(track => {
+        track.enabled = isMuted; // Toggle the enabled state
+      });
+      setIsMuted(!isMuted);
+    }
+  }, [isMuted]);
+
+  const setAudioLevel = useCallback((level: number) => {
+    // Note: Direct audio level control is very limited in browsers
+    // Volume control would require audio context processing for full implementation
+    // This is a placeholder for future audio context-based volume control
+    if (streamRef.current) {
+      // Audio level control is not directly supported through MediaTrackConstraints
+      // In a real implementation, you would use:
+      // 1. Web Audio API with GainNode
+      // 2. Audio context processing
+      // 3. Custom audio pipeline
+      console.log('Audio level requested:', level);
+    }
+  }, []);
+
   return {
     recordingState,
     duration,
     error,
+    stream: streamRef.current,
+    isMuted,
     startRecording,
     stopRecording,
     pauseRecording,
     resumeRecording,
     getStatus,
+    clearError,
+    toggleMute,
+    setAudioLevel,
   };
 }
