@@ -57,7 +57,7 @@ export default function RootLayout({
         className={`${outfit.variable} antialiased`}
         suppressHydrationWarning
       >
-        <PlausibleProvider domain="beeroll.com" trackFileDownloads taggedEvents>
+        <PlausibleProvider domain="beeroll.app" trackFileDownloads taggedEvents>
           <ThemeProvider>
             {children}
             <ThemeToggle />
