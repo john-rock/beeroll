@@ -165,8 +165,8 @@ export function ScreenRecorder() {
         <div className="max-w-lg w-full space-y-8 relative">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-6xl font-bold text-black dark:text-white bg-clip-text border-4 rounded-3xl dark:border-white inline-block px-6 pb-3 transition-all duration-300">
-              snapp
+            <h1 className="text-6xl font-bold text-black dark:text-white bg-clip-text border-4 rounded-3xl dark:border-white inline-block px-6 pb-1 transition-all duration-300">
+              beeroll
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed transition-colors duration-300">
             Local first screen recording. No cloud, no upload, no BS.
