@@ -6,7 +6,7 @@ import { downloadBlob, formatDuration, generateFilename, formatFileSize } from '
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
-import { Play, Pause, Square, Check, AlertTriangle, Settings, ChevronDown, LayoutGrid } from 'lucide-react';
+import { Play, ChevronDown, Pause, RotateCw, Save, Settings, Zap } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -190,9 +190,7 @@ export function ScreenRecorder() {
               disabled={isProcessing}
             >
               <div className="flex items-center justify-center space-x-3">
-                <svg className="w-6 h-6 group-hover:animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                </svg>
+                <Play className="w-6 h-6 group-hover:animate-pulse" fill="currentColor" />
                 <span className="text-xl">Start Recording</span>
               </div>
             </button>
@@ -209,9 +207,7 @@ export function ScreenRecorder() {
                     onClick={pauseRecording}
                     className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
                   >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
+                    <Pause className="w-4 h-4" fill="currentColor" />
                     <span>Pause</span>
                   </button>
                 )}
@@ -221,9 +217,7 @@ export function ScreenRecorder() {
                     onClick={resumeRecording}
                     className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
                   >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                    </svg>
+                    <RotateCw className="w-4 h-4" fill="currentColor" />
                     <span>Resume</span>
                   </button>
                 )}
@@ -242,9 +236,7 @@ export function ScreenRecorder() {
                     </>
                   ) : (
                     <>
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clipRule="evenodd" />
-                      </svg>
+                      <Save />
                       <span>Stop & Save</span>
                     </>
                   )}
@@ -358,9 +350,7 @@ export function ScreenRecorder() {
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 space-y-6 transition-all duration-300 hover:shadow-xl">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
-                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                  </svg>
+                  <Settings className="w-5 h-5"/>
                   <span>Quick Settings</span>
                 </h3>
               </div>
@@ -402,9 +392,7 @@ export function ScreenRecorder() {
                 className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors duration-200"
               >
                 <div className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                  </svg>
+              <Zap className="w-5 h-5"/>
                   <span className="text-lg font-semibold text-gray-900 dark:text-white">Advanced Settings</span>
                 </div>
                 <ChevronDown 
