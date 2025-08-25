@@ -15,6 +15,8 @@ import { RecordingPreview } from './RecordingPreview';
 import { getCompressionEngine, CompressionProgress, CompressionResult } from '../utils/compressionEngine';
 import { RecordingErrorHandler, CompatibilityChecker } from '../utils/errorHandling';
 
+import {usePlausible} from 'next-plausible'
+
 export function ScreenRecorder() {
   const {
     recordingState,
@@ -41,6 +43,8 @@ export function ScreenRecorder() {
   const [recordedDuration, setRecordedDuration] = useState(0);
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
+  const plausible = usePlausible()
+
   // Keyboard shortcut for starting recording with 'R' key
   useKeyboardShortcut('r', () => {
     if (isInactive && !isProcessing) {
@@ -63,6 +67,7 @@ export function ScreenRecorder() {
   }, []);
 
   const handleStartRecording = async () => {
+    plausible('start-recording')
     try {
       // Clear any previous state
       clearError();
@@ -192,6 +197,7 @@ export function ScreenRecorder() {
               onClick={handleStartRecording}
               className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-xl transition-all duration-300 transform hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               disabled={isProcessing}
+              data-plausible="start-recording"
             >
               <div className="flex items-center justify-center space-x-3">
                 <Play className="w-5 h-5" />
