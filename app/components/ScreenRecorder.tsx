@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useScreenRecording } from '../hooks/useScreenRecording';
+import { useKeyboardShortcut } from '../hooks/useKeyboardShortcuts';
 import { downloadBlob, formatDuration, generateFilename, formatFileSize } from '../utils/fileDownload';
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
-import { Play, ChevronDown, Pause, RotateCw, Save, Settings, Zap } from 'lucide-react';
+import { Play, ChevronDown, Pause, RotateCw, Save, Settings, Zap, Keyboard } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -43,6 +44,13 @@ export function ScreenRecorder() {
   const [recordedVideo, setRecordedVideo] = useState<Blob | null>(null);
   const [recordedDuration, setRecordedDuration] = useState(0);
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+
+  // Keyboard shortcut for starting recording with 'R' key
+  useKeyboardShortcut('r', () => {
+    if (isInactive && !isProcessing) {
+      handleStartRecording();
+    }
+  }, { enabled: true });
 
   // Initialize settings and check compatibility
   useEffect(() => {
@@ -194,6 +202,16 @@ export function ScreenRecorder() {
                 <span className="text-xl font-normal">Start Recording</span>
               </div>
             </button>
+          )}
+
+          {isInactive && (
+            <div className="flex items-center justify-center space-x-2 text-gray-500 dark:text-gray-500 text-xs transition-colors duration-300">
+              <span>Or press</span>
+              <kbd className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300 font-mono text-xs border border-gray-300 dark:border-gray-600">
+                R
+              </kbd>
+              <span>to start</span>
+            </div>
           )}
 
           {(isRecording || isPaused) && (
@@ -436,10 +454,11 @@ export function ScreenRecorder() {
 
         {/* Instructions */}
         {isInactive && (
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-3">
             <p className="text-gray-600 dark:text-gray-400 text-sm transition-colors duration-300">
               Click "Start Recording" to capture your screen
             </p>
+
             <p className="text-gray-500 dark:text-gray-500 text-xs transition-colors duration-300">
               Your browser will ask which screen or window to record
             </p>
