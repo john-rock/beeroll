@@ -4,8 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ThemeToggle } from "./components/ThemeToggle";
 
-const geistSans = Outfit({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
@@ -53,7 +53,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} antialiased`}
+        className={`${outfit.variable} antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider>
