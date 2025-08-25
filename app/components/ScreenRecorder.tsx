@@ -177,9 +177,6 @@ export function ScreenRecorder() {
               >
                 {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
                   <option key={key} value={key}>
-                    {key === 'high' && '🎯 '}
-                    {key === 'balanced' && '⚖️ '}
-                    {key === 'compressed' && '📦 '}
                     {config.description}
                   </option>
                 ))}
