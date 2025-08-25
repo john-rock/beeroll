@@ -121,13 +121,6 @@ export function AudioControls({ audioOptions, onAudioOptionsChange, disabled = f
           </div>
         )}
 
-        {/* Loading indicator */}
-        {isLoadingDevices && (
-          <div className="ml-7 text-xs text-gray-500 dark:text-gray-400">
-            Loading microphone devices...
-          </div>
-        )}
-
         {/* No audio warning */}
         {!audioOptions.system && !audioOptions.microphone && (
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3">
