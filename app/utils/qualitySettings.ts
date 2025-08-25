@@ -37,7 +37,7 @@ export const QUALITY_PRESETS: Record<QualityPreset, QualityConfig> = {
 };
 
 // Local storage key for quality preset
-const QUALITY_PRESET_STORAGE_KEY = 'recora-quality-preset';
+const QUALITY_PRESET_STORAGE_KEY = 'snapp-quality-preset';
 
 // Default quality preset
 const DEFAULT_QUALITY_PRESET: QualityPreset = 'balanced';

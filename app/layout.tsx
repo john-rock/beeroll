@@ -10,7 +10,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Recora - Screen Recording",
+  title: "Snapp - Local first screen recording",
   description: "Lightweight, browser-based screen recording application",
 };
 

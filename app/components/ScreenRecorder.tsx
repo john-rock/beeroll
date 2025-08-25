@@ -235,7 +235,7 @@ export function ScreenRecorder() {
                     onClick={resumeRecording}
                     className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
                   >
-                    <RotateCw className="w-4 h-4" fill="currentColor" />
+                    <RotateCw className="w-4 h-4" />
                     <span>Resume</span>
                   </button>
                 )}
