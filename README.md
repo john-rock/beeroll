@@ -16,7 +16,7 @@ A modern, privacy-focused screen recording application built with Next.js and Ty
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 20+ 
 - Modern browser with MediaRecorder API support
 - FFmpeg.wasm for video compression
 
@@ -24,7 +24,7 @@ A modern, privacy-focused screen recording application built with Next.js and Ty
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/beeroll.git
+git clone https://github.com/john-rock/beeroll.git
 cd beeroll
 
 # Install dependencies
@@ -446,9 +446,8 @@ The Apache 2.0 license is one of the most permissive open source licenses, makin
 
 ## 🤝 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/beeroll/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/beeroll/discussions)
-- **Wiki**: [Project Wiki](https://github.com/yourusername/beeroll/wiki)
+- **Issues**: [GitHub Issues](https://github.com/john-rock/beeroll/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/john-rock/beeroll/discussions)
 
 ## 🙏 Acknowledgments
 
@@ -462,8 +461,6 @@ The Apache 2.0 license is one of the most permissive open source licenses, makin
 - **Version**: 0.1.0
 - **Status**: Active Development
 - **Browser Support**: Chrome 80+, Firefox 75+, Safari 14+
-- **Node.js**: 18.0.0+
+- **Node.js**: 20.0.0+
 
 ---
-
-Made with ❤️ by the Beeroll team
