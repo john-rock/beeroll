@@ -248,7 +248,7 @@ export function ScreenRecorder() {
             {isInactive && (
               <button
                 onClick={handleStartRecording}
-                className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 disabled={isProcessing}
                 data-plausible="start-recording"
                 aria-label="Start screen recording"

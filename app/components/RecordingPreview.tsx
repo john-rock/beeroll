@@ -223,7 +223,7 @@ export function RecordingPreview({
       <section className="flex space-x-3" aria-label="Recording Actions">
         <button
           onClick={handleDownload}
-          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform"
           aria-label="Download recording"
         >
           <Download className="w-5 h-5" aria-hidden="true" />
