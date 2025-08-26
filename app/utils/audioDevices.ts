@@ -36,6 +36,9 @@ export interface AudioDevice {
 /**
  * Get available audio input devices (microphones)
  * 
+ * ⚠️  IMPORTANT: This function will request microphone permission immediately.
+ * Only call this when the user has explicitly chosen to use microphone audio.
+ * 
  * This function will request microphone permission and enumerate all available
  * audio input devices. If permission is denied, an empty array is returned.
  * 
@@ -52,8 +55,8 @@ export interface AudioDevice {
  *     console.log(`Found ${devices.length} microphone(s)`);
  *   }
  * } catch (error) {
- *   console.error('Failed to get audio devices:', error);
- * }
+ *     console.error('Failed to get audio devices:', error);
+ *   }
  * ```
  */
 export async function getAudioInputDevices(): Promise<AudioDevice[]> {
@@ -83,6 +86,9 @@ export async function getAudioInputDevices(): Promise<AudioDevice[]> {
 
 /**
  * Test if microphone access is available
+ * 
+ * ⚠️  IMPORTANT: This function will request microphone permission immediately.
+ * Only call this when the user has explicitly chosen to use microphone audio.
  * 
  * This function attempts to get microphone access to determine if the user
  * has granted permission and if the device supports audio input.
@@ -116,6 +122,9 @@ export async function testMicrophoneAccess(): Promise<boolean> {
 
 /**
  * Combine screen audio with microphone audio for mixed recording
+ * 
+ * ⚠️  IMPORTANT: This function will request microphone permission if not already granted.
+ * Only call this when the user has explicitly chosen to use microphone audio.
  * 
  * This function creates a mixed audio stream by combining system audio
  * from screen sharing with microphone input. The result is a single
