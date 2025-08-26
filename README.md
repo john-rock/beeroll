@@ -1,6 +1,7 @@
 # 🎥 Beeroll - Local-First Screen Recording
 
 A modern, privacy-focused screen recording application built with Next.js and TypeScript. Record your screen locally without any cloud uploads or data collection.
+[Screen Recording Aug 26 2025.webm](https://github.com/user-attachments/assets/9e0a7117-4d5a-4315-99d2-f0944af1ed6f)
 
 ## ✨ Features
 
