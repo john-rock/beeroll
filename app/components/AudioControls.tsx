@@ -211,7 +211,7 @@ export function AudioControls({
                     </option>
                   ))}
                 </select>
-                <p id="microphone-device-description" className="text-xs text-gray-500 dark:text-gray-400">
+                <p id="microphone-device-description" className="text-xs sr-only text-gray-500 dark:text-gray-400">
                   Select which microphone to use for recording
                 </p>
               </>
