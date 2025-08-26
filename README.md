@@ -433,7 +433,16 @@ When creating or modifying components:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License, Version 2.0 - see the [LICENSE](LICENSE) file for details.
+
+**What this means:**
+- ✅ **Free to use** for any purpose (personal, commercial, educational)
+- ✅ **Free to modify** and distribute
+- ✅ **Free to sell** and monetize
+- ✅ **Patent protection** included
+- ✅ **Very permissive** - business-friendly
+
+The Apache 2.0 license is one of the most permissive open source licenses, making it perfect for both community collaboration and commercial adoption.
 
 ## 🤝 Support
 
