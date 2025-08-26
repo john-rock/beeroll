@@ -227,7 +227,7 @@ export function ScreenRecorder() {
               beeroll
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed transition-colors duration-300">
-              Local first screen recording. No cloud, no upload, no BS.
+              Screen recording at 60fps. Local-first, private, instant.
             </p>
           </header>
 
