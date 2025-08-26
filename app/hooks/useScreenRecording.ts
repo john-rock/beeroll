@@ -263,6 +263,7 @@ export function useScreenRecording(config: UseScreenRecordingConfig = {}) {
 
       mediaRecorder.stop();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update the ref whenever stopRecording changes

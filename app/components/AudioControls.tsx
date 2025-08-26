@@ -151,7 +151,7 @@ export function AudioControls({
           </label>
         </div>
         <p id="system-audio-description" className="text-xs sr-only text-gray-500 dark:text-gray-400 ml-7">
-          Record audio from your computer's speakers and applications
+          Record audio from your computer&apos;s speakers and applications
         </p>
 
         {/* Microphone */}

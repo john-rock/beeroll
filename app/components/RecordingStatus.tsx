@@ -44,7 +44,6 @@ export function RecordingStatus({
   }
 
   const statusText = isRecording ? 'Recording' : 'Paused';
-  const statusColor = isRecording ? 'red' : 'yellow';
 
   return (
     <div 

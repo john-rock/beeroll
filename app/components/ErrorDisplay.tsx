@@ -52,6 +52,7 @@ export function ErrorDisplay({
       case RecordingErrorType.NOT_SUPPORTED:
         return <Maximize className="w-6 h-6" aria-hidden="true" />;
       case RecordingErrorType.NO_DEVICES:
+        // eslint-disable-next-line jsx-a11y/alt-text
         return <Image className="w-6 h-6" aria-hidden="true" />;
       default:
         return <AlertCircle className="w-6 h-6" aria-hidden="true" />;

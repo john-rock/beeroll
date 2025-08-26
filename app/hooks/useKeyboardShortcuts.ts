@@ -92,24 +92,14 @@ export function useKeyboardShortcuts(
   const defaultTarget = typeof document !== 'undefined' ? document : null;
   const eventTarget = target || defaultTarget;
 
-  // Early return if not on client side
-  if (typeof window === 'undefined') {
-    return {
-      getActiveShortcuts: () => [],
-      getShortcutDescription: () => ''
-    };
-  }
-
   // Ref to store shortcuts for stable reference
   const shortcutsRef = useRef(shortcuts);
   shortcutsRef.current = shortcuts;
 
-  /**
-   * Check if the target element should ignore shortcuts
-   * 
-   * @param target - The event target element
-   * @returns True if shortcuts should be ignored
-   */
+  // Check if we should return early (but don't return yet)
+  const shouldReturnEarly = typeof window === 'undefined';
+
+  // All hooks must be called before any early returns
   const shouldIgnoreShortcuts = useCallback((target: EventTarget | null): boolean => {
     if (!ignoreFormFields || !target) return false;
     
@@ -136,11 +126,6 @@ export function useKeyboardShortcuts(
     return false;
   }, [ignoreFormFields]);
 
-  /**
-   * Handle keyboard events and trigger appropriate shortcuts
-   * 
-   * @param event - Keyboard event
-   */
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (!enabled) return;
 
@@ -202,12 +187,6 @@ export function useKeyboardShortcuts(
     }
   }, [enabled, debug, shouldIgnoreShortcuts]);
 
-  /**
-   * Get a human-readable description of a shortcut
-   * 
-   * @param shortcut - The shortcut configuration
-   * @returns Formatted shortcut description
-   */
   const getShortcutDescription = useCallback((shortcut: KeyboardShortcutConfig): string => {
     const modifiers: string[] = [];
     
@@ -225,11 +204,6 @@ export function useKeyboardShortcuts(
     return key;
   }, []);
 
-  /**
-   * Get all active shortcuts for debugging or accessibility
-   * 
-   * @returns Array of active shortcut descriptions
-   */
   const getActiveShortcuts = useCallback(() => {
     return shortcutsRef.current
       .filter(shortcut => shortcut.enabled)
@@ -251,6 +225,16 @@ export function useKeyboardShortcuts(
       eventTarget.removeEventListener('keydown', handleKeyDown as EventListener);
     };
   }, [eventTarget, handleKeyDown, enabled]);
+
+  // Early return if not on client side
+  if (shouldReturnEarly) {
+    return {
+      getActiveShortcuts: () => [],
+      getShortcutDescription: () => ''
+    };
+  }
+
+
 
   return {
     getActiveShortcuts,
