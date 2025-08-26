@@ -25,6 +25,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss, className = '' }: Erro
         );
       case RecordingErrorType.NO_DEVICES:
         return (
+          // eslint-disable-next-line jsx-a11y/alt-text
           <Image className="w-6 h-6" />
         );
       default:

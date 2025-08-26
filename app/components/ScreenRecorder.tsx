@@ -13,7 +13,7 @@ import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
 import { RecordingPreview } from './RecordingPreview';
 import { getCompressionEngine, CompressionProgress, CompressionResult } from '../utils/compressionEngine';
-import { RecordingErrorHandler, CompatibilityChecker } from '../utils/errorHandling';
+import { CompatibilityChecker } from '../utils/errorHandling';
 
 import {usePlausible} from 'next-plausible'
 
@@ -38,6 +38,7 @@ export function ScreenRecorder() {
   const [compressionProgress, setCompressionProgress] = useState<CompressionProgress | null>(null);
   const [compressionResult, setCompressionResult] = useState<CompressionResult | null>(null);
   const [useCompression, setUseCompression] = useState(true);
+
   const [compatibilityIssues, setCompatibilityIssues] = useState<string[]>([]);
   const [recordedVideo, setRecordedVideo] = useState<Blob | null>(null);
   const [recordedDuration, setRecordedDuration] = useState(0);
@@ -96,26 +97,40 @@ export function ScreenRecorder() {
       
       let finalBlob = blob;
       
-      // Apply compression if enabled
-      if (useCompression) {
-        try {
-          const compressionEngine = getCompressionEngine();
-          const result = await compressionEngine.compress(
-            blob,
-            { quality: selectedQuality, format: blob.type.includes('webm') ? 'webm' : 'mp4' },
-            (progress) => setCompressionProgress(progress)
-          );
-          
-          finalBlob = result.blob;
-          setCompressionResult(result);
-        } catch (compressionError) {
-          console.warn('Compression failed, using original recording:', compressionError);
-          // Show compression error but continue with original recording
-          const compError = RecordingErrorHandler.handleError(compressionError);
-          console.error('Compression error details:', compError);
-          // Continue with original blob
+              // Apply compression if enabled
+        if (useCompression) {
+          try {
+            setCompressionProgress({ progress: 0, stage: 'Initializing FFmpeg...' });
+            
+            const compressionEngine = getCompressionEngine();
+            const result = await compressionEngine.compress(
+              blob,
+              { quality: selectedQuality, format: blob.type.includes('webm') ? 'webm' : 'mp4' },
+              (progress) => setCompressionProgress(progress)
+            );
+            
+            finalBlob = result.blob;
+            setCompressionResult(result);
+          } catch (compressionError) {
+            console.warn('Compression failed, using original recording:', compressionError);
+            
+            // Better error logging
+            if (compressionError instanceof Error) {
+              console.error('Compression error:', {
+                message: compressionError.message,
+                name: compressionError.name,
+                stack: compressionError.stack
+              });
+            } else {
+              console.error('Compression error (non-Error object):', compressionError);
+            }
+            
+            // Show user-friendly compression error message
+            console.warn('Compression failed, but recording was saved. Original file size will be larger.');
+            
+            // Continue with original blob
+          }
         }
-      }
       
       // Store the video for preview instead of immediately downloading
       setRecordedVideo(finalBlob);
@@ -180,7 +195,7 @@ export function ScreenRecorder() {
 
         {/* Recording Status */}
         {(isRecording || isPaused) && (
-          <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-2 border-red-200 dark:border-red-700 rounded-xl p-6 shadow-lg">
+          <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-2 border-red-200 dark:border-red-700 rounded-lg p-6 shadow-lg">
             <RecordingStatus 
               isRecording={isRecording}
               isPaused={isPaused}
@@ -195,7 +210,7 @@ export function ScreenRecorder() {
           {isInactive && (
             <button
               onClick={handleStartRecording}
-              className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-xl transition-all duration-300 transform hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl active:scale-[0.98] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               disabled={isProcessing}
               data-plausible="start-recording"
             >
@@ -245,7 +260,7 @@ export function ScreenRecorder() {
                 <button
                   onClick={handleStopRecording}
                   disabled={isProcessing}
-                  className="col-span-2 bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] disabled:transform-none"
+                  className="col-span-1 bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform disabled:transform-none"
                 >
                   {isProcessing ? (
                     <>
@@ -268,7 +283,7 @@ export function ScreenRecorder() {
 
         {/* Compression Progress */}
         {compressionProgress && (
-          <div className="bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-xl p-6 shadow-lg transition-all duration-300">
+          <div className="bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-lg p-6 shadow-lg transition-all duration-300">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -298,7 +313,7 @@ export function ScreenRecorder() {
 
         {/* Compression Result */}
         {compressionResult && (
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-xl p-6 shadow-lg transition-all duration-300">
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-lg p-6 shadow-lg transition-all duration-300">
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
@@ -339,7 +354,7 @@ export function ScreenRecorder() {
 
         {/* Compatibility Warnings */}
         {compatibilityIssues.length > 0 && (
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl p-6 shadow-lg transition-all duration-300">
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-6 shadow-lg transition-all duration-300">
             <div className="flex items-start space-x-4">
               <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -367,7 +382,7 @@ export function ScreenRecorder() {
         {isInactive && (
           <div className="space-y-6">
             {/* Quick Settings Card */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 space-y-6 transition-all duration-300 hover:shadow-xl">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 space-y-6 transition-all duration-300 hover:shadow-xl">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
                   <Settings className="w-5 h-5"/>
@@ -406,10 +421,10 @@ export function ScreenRecorder() {
             </div>
 
             {/* Advanced Settings Card */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
               <button
                 onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors duration-200"
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
               >
                 <div className="flex items-center space-x-3">
               <Zap className="w-5 h-5"/>
@@ -440,7 +455,7 @@ export function ScreenRecorder() {
                           Enable advanced compression
                         </label>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          Reduces file size with optimized encoding. Processing may take longer.
+                          Uses FFmpeg.wasm for real video compression. Reduces file size with VP9 encoding. Processing may take longer.
                         </p>
                       </div>
                     </div>
