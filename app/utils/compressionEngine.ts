@@ -1,5 +1,5 @@
 import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { fetchFile, toBlobURL } from '@ffmpeg/util';
+import { fetchFile } from '@ffmpeg/util';
 import { CompressionSettings } from '../types/recording';
 
 /**
@@ -188,19 +188,13 @@ export class CompressionEngine {
       console.log('Creating FFmpeg instance...');
       this.ffmpeg = new FFmpeg();
       
-      // Load FFmpeg core - using a more stable version
-      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.4/dist/umd';
-      console.log('Loading FFmpeg core from:', baseURL);
+      // Load FFmpeg core using the simplified API (no need to specify URLs manually)
+      console.log('Loading FFmpeg core...');
       
       try {
-        const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript');
-        const wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm');
-        
-        console.log('FFmpeg URLs created, loading core...');
-        await this.ffmpeg.load({
-          coreURL,
-          wasmURL,
-        });
+        // The newer API automatically handles core loading
+        await this.ffmpeg.load();
+        console.log('FFmpeg core loaded successfully');
       } catch (loadError) {
         console.error('Failed to load FFmpeg core:', loadError);
         throw new Error(`Failed to load FFmpeg core: ${loadError instanceof Error ? loadError.message : String(loadError)}`);
