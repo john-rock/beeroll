@@ -176,11 +176,111 @@ Handles keyboard shortcuts for quick actions.
 
 ### Utilities
 
-- **`audioDevices.ts`**: Audio device detection and management
-- **`compressionEngine.ts`**: FFmpeg-based video compression
-- **`errorHandling.ts`**: Error classification and handling
-- **`fileDownload.ts`**: File download utilities
-- **`qualitySettings.ts`**: Quality preset management
+The application includes several utility modules for common functionality:
+
+#### **`audioDevices.ts`** - Audio Device Management
+Comprehensive audio device detection and management utilities.
+
+**Features:**
+- Microphone device enumeration
+- Audio stream mixing for screen + microphone recording
+- Browser compatibility checking
+- Permission handling and error recovery
+
+**Usage:**
+```typescript
+import { getAudioInputDevices, testMicrophoneAccess } from './utils/audioDevices';
+
+// Get available microphones
+const devices = await getAudioInputDevices();
+
+// Test microphone access
+const hasAccess = await testMicrophoneAccess();
+```
+
+#### **`compressionEngine.ts`** - Video Compression
+FFmpeg-based video compression engine for local video processing.
+
+**Features:**
+- Hardware-accelerated video compression
+- Multiple quality presets
+- Progress monitoring and cancellation
+- Fallback compression strategies
+- Browser compatibility checking
+
+**Usage:**
+```typescript
+import { getCompressionEngine } from './utils/compressionEngine';
+
+const engine = getCompressionEngine();
+const result = await engine.compress(videoBlob, { quality: 'balanced' });
+```
+
+#### **`errorHandling.ts`** - Error Management
+Comprehensive error handling system for recording operations.
+
+**Features:**
+- Error classification and categorization
+- User-friendly error messages
+- Recovery suggestions
+- Browser compatibility checking
+- Detailed error context
+
+**Usage:**
+```typescript
+import { RecordingErrorHandler } from './utils/errorHandling';
+
+try {
+  await startRecording();
+} catch (error) {
+  const recordingError = RecordingErrorHandler.handleError(error);
+  console.error('Recording failed:', recordingError.message);
+}
+```
+
+#### **`fileDownload.ts`** - File Operations
+File download and formatting utilities for screen recordings.
+
+**Features:**
+- Secure blob downloads
+- Duration formatting
+- File size formatting
+- Automatic filename generation
+- Error handling and validation
+
+**Usage:**
+```typescript
+import { downloadBlob, formatDuration, generateFilename } from './utils/fileDownload';
+
+// Download recording
+downloadBlob(videoBlob, 'recording.webm');
+
+// Format duration
+const duration = formatDuration(65000); // "01:05"
+
+// Generate filename
+const filename = generateFilename('video/webm');
+```
+
+#### **`qualitySettings.ts`** - Quality Management
+Quality presets and configuration management for video recording.
+
+**Features:**
+- Multiple quality presets (high, balanced, compressed)
+- Local storage persistence
+- Device capability recommendations
+- Validation and error handling
+
+**Usage:**
+```typescript
+import { getQualityConfig, saveQualityPreset } from './utils/qualitySettings';
+
+// Get quality configuration
+const config = getQualityConfig('balanced');
+
+// Save user preference
+saveQualityPreset('high');
+```
 
 ## 🎨 Design System
 

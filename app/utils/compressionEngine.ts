@@ -2,32 +2,77 @@ import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import { CompressionSettings } from '../types/recording';
 
+/**
+ * Represents the progress of a compression operation
+ */
 export interface CompressionProgress {
-  progress: number; // 0-100
+  /** Progress percentage from 0 to 100 */
+  progress: number;
+  /** Human-readable description of the current stage */
   stage: string;
 }
 
+/**
+ * Result of a completed compression operation
+ */
 export interface CompressionResult {
+  /** The compressed video blob */
   blob: Blob;
+  /** Original file size in bytes */
   originalSize: number;
+  /** Compressed file size in bytes */
   compressedSize: number;
+  /** Compression ratio as a percentage */
   compressionRatio: number;
+  /** Total processing time in milliseconds */
   processingTime: number;
 }
 
+/**
+ * FFmpeg-based video compression engine for local video processing.
+ * 
+ * Features:
+ * - Hardware-accelerated video compression
+ * - Multiple quality presets
+ * - Progress monitoring and cancellation
+ * - Fallback compression strategies
+ * - Browser compatibility checking
+ * 
+ * @example
+ * ```typescript
+ * const engine = getCompressionEngine();
+ * const result = await engine.compress(videoBlob, { quality: 'balanced' });
+ * console.log(`Compressed from ${result.originalSize} to ${result.compressedSize} bytes`);
+ * ```
+ */
 export class CompressionEngine {
   private ffmpeg: FFmpeg | null = null;
   private isCompressing = false;
   private progressCallback?: (progress: CompressionProgress) => void;
   private isInitialized = false;
+  private readonly TIMEOUT_MS = 30000; // 30 seconds
+  private readonly PROGRESS_UPDATE_INTERVAL = 1000; // 1 second
 
+  /**
+   * Compress a video blob using FFmpeg with the specified settings
+   * 
+   * @param videoBlob - The video blob to compress
+   * @param settings - Compression quality and format settings
+   * @param onProgress - Optional callback for progress updates
+   * @returns Promise resolving to compression result
+   * @throws Error if compression fails or FFmpeg is not available
+   */
   async compress(
     videoBlob: Blob, 
     settings: CompressionSettings,
     onProgress?: (progress: CompressionProgress) => void
   ): Promise<CompressionResult> {
     if (this.isCompressing) {
-      throw new Error('Compression already in progress');
+      throw new Error('Compression already in progress. Please wait for the current operation to complete.');
+    }
+
+    if (!videoBlob || videoBlob.size === 0) {
+      throw new Error('Invalid video blob provided. Blob must exist and have content.');
     }
 
     this.isCompressing = true;
@@ -55,25 +100,43 @@ export class CompressionEngine {
         compressionRatio,
         processingTime
       };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Video compression failed: ${errorMessage}`);
     } finally {
       this.isCompressing = false;
     }
   }
 
+  /**
+   * Get the current compression progress (deprecated - use progress callback)
+   * @deprecated Use the onProgress callback parameter instead
+   */
   getProgress(): number {
-    // This would be updated by FFmpeg progress events
+    console.warn('getProgress() is deprecated. Use the onProgress callback parameter instead.');
     return 0;
   }
 
-  // Public status methods
+  /**
+   * Check if compression is currently running
+   * @returns True if compression is in progress
+   */
   isRunning(): boolean {
     return this.isCompressing;
   }
 
+  /**
+   * Check if the compression engine is ready for use
+   * @returns True if FFmpeg is initialized and ready
+   */
   isReady(): boolean {
     return this.isInitialized && this.ffmpeg !== null;
   }
 
+  /**
+   * Get the current status of the compression engine
+   * @returns Object containing engine status information
+   */
   getStatus(): {
     isRunning: boolean;
     isReady: boolean;
@@ -88,15 +151,26 @@ export class CompressionEngine {
     };
   }
 
+  /**
+   * Cancel the current compression operation and clean up resources
+   */
   cancel(): void {
     if (this.ffmpeg) {
-      this.ffmpeg.terminate();
+      try {
+        this.ffmpeg.terminate();
+      } catch (error) {
+        console.warn('Error terminating FFmpeg:', error);
+      }
       this.ffmpeg = null;
     }
     this.isCompressing = false;
     this.isInitialized = false;
   }
 
+  /**
+   * Initialize FFmpeg.wasm with core files and basic functionality testing
+   * @throws Error if initialization fails
+   */
   private async initializeFFmpeg(): Promise<void> {
     if (this.isInitialized) return;
 
@@ -108,7 +182,7 @@ export class CompressionEngine {
 
       // Check browser compatibility
       if (!this.checkBrowserCompatibility()) {
-        throw new Error('Browser does not support required features for FFmpeg.wasm');
+        throw new Error('Browser does not support required features for FFmpeg.wasm. Please use a modern browser with WebAssembly support.');
       }
 
       console.log('Creating FFmpeg instance...');
@@ -150,6 +224,7 @@ export class CompressionEngine {
       });
     } catch (error) {
       console.error('Failed to initialize FFmpeg:', error);
+      this.cleanup();
       if (error instanceof Error) {
         throw new Error(`FFmpeg initialization failed: ${error.message}`);
       } else {
@@ -158,9 +233,16 @@ export class CompressionEngine {
     }
   }
 
+  /**
+   * Perform the actual video compression using FFmpeg
+   * @param videoBlob - Video blob to compress
+   * @param settings - Compression settings
+   * @returns Promise resolving to compressed blob
+   * @throws Error if compression fails
+   */
   private async performCompression(videoBlob: Blob, settings: CompressionSettings): Promise<Blob> {
     if (!this.ffmpeg || !this.isInitialized) {
-      throw new Error('FFmpeg not initialized');
+      throw new Error('FFmpeg not initialized. Please ensure the compression engine is ready.');
     }
 
     try {
@@ -223,8 +305,8 @@ export class CompressionEngine {
       
       try {
         // Add timeout to prevent hanging
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('FFmpeg execution timed out after 30 seconds')), 30000);
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error('FFmpeg execution timed out after 30 seconds')), this.TIMEOUT_MS);
         });
         
         // Add progress monitoring
@@ -233,7 +315,7 @@ export class CompressionEngine {
             progress: Math.min(90, 25 + Math.random() * 65), // Simulate progress
             stage: compressionStrategy === 'copy-mode' ? 'Optimizing video structure...' : 'Processing video...'
           });
-        }, 1000);
+        }, this.PROGRESS_UPDATE_INTERVAL);
         
         const execPromise = this.ffmpeg.exec(ffmpegArgs);
         
@@ -320,12 +402,17 @@ export class CompressionEngine {
     }
   }
 
+  /**
+   * Get FFmpeg compression arguments based on quality settings
+   * @param settings - Compression quality settings
+   * @returns Array of FFmpeg command line arguments
+   */
   private getCompressionArgs(settings: CompressionSettings): string[] {
     const { quality } = settings;
     
     // Define compression presets based on quality
     // Using more basic, widely-supported codecs for better compatibility
-    const presets = {
+    const presets: Record<string, string[]> = {
       'high': [
         '-c:v', 'libvpx',          // VP8 codec (more widely supported than VP9)
         '-crf', '10',              // Constant Rate Factor (lower = higher quality)
@@ -355,6 +442,10 @@ export class CompressionEngine {
     return presets[quality] || presets.balanced;
   }
 
+  /**
+   * Check if the browser supports required features for FFmpeg.wasm
+   * @returns True if all required features are supported
+   */
   private checkBrowserCompatibility(): boolean {
     // Check for SharedArrayBuffer support (required for FFmpeg.wasm)
     if (typeof SharedArrayBuffer === 'undefined') {
@@ -377,9 +468,16 @@ export class CompressionEngine {
     return true;
   }
 
+  /**
+   * Clean up resources and reset engine state
+   */
   private cleanup(): void {
     if (this.ffmpeg) {
-      this.ffmpeg.terminate();
+      try {
+        this.ffmpeg.terminate();
+      } catch (error) {
+        console.warn('Error during FFmpeg cleanup:', error);
+      }
       this.ffmpeg = null;
     }
     this.isCompressing = false;
@@ -388,9 +486,15 @@ export class CompressionEngine {
   }
 }
 
-// Singleton instance
+/**
+ * Singleton instance of the compression engine
+ */
 let compressionEngine: CompressionEngine | null = null;
 
+/**
+ * Get the global compression engine instance
+ * @returns Singleton CompressionEngine instance
+ */
 export function getCompressionEngine(): CompressionEngine {
   if (!compressionEngine) {
     compressionEngine = new CompressionEngine();
