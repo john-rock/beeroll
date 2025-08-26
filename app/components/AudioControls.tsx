@@ -150,7 +150,7 @@ export function AudioControls({
             <span>System Audio</span>
           </label>
         </div>
-        <p id="system-audio-description" className="text-xs text-gray-500 dark:text-gray-400 ml-7">
+        <p id="system-audio-description" className="text-xs sr-only text-gray-500 dark:text-gray-400 ml-7">
           Record audio from your computer's speakers and applications
         </p>
 
@@ -173,7 +173,7 @@ export function AudioControls({
             <span>Microphone</span>
           </label>
         </div>
-        <p id="microphone-audio-description" className="text-xs text-gray-500 dark:text-gray-400 ml-7">
+        <p id="microphone-audio-description" className="text-xs sr-only text-gray-500 dark:text-gray-400 ml-7">
           Record audio from your microphone input
         </p>
 

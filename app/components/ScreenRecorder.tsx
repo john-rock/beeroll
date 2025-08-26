@@ -453,9 +453,6 @@ export function ScreenRecorder() {
                       </option>
                     ))}
                   </select>
-                  <p id="quality-description" className="text-xs text-gray-500 dark:text-gray-400">
-                    Choose the quality preset for your recording. Higher quality means larger file sizes.
-                  </p>
                 </div>
 
                 {/* Audio Controls */}
