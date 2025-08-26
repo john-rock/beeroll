@@ -168,11 +168,86 @@ import { ThemeToggle } from './components/ThemeToggle';
 
 ### Hooks
 
-#### `useScreenRecording`
-Manages the core recording functionality.
+The application includes custom React hooks for managing complex functionality:
 
-#### `useKeyboardShortcuts`
-Handles keyboard shortcuts for quick actions.
+#### **`useScreenRecording`** - Screen Recording Management
+Comprehensive hook for managing screen recording functionality.
+
+**Features:**
+- Screen capture with quality presets
+- Audio mixing (system + microphone)
+- Pause/resume functionality
+- Automatic cleanup and error handling
+- Timer management and status tracking
+- Mute controls and audio level management
+
+**Usage:**
+```tsx
+import { useScreenRecording } from './hooks/useScreenRecording';
+
+const {
+  recordingState,
+  duration,
+  error,
+  startRecording,
+  stopRecording,
+  pauseRecording,
+  resumeRecording
+} = useScreenRecording({
+  onError: (error) => console.error('Recording error:', error),
+  onStateChange: (state) => console.log('State changed to:', state)
+});
+
+// Start recording
+await startRecording({
+  audio: { system: true, microphone: true },
+  video: true,
+  quality: 'balanced'
+});
+```
+
+#### **`useKeyboardShortcuts`** - Keyboard Shortcut Management
+Advanced hook for managing keyboard shortcuts with priority handling.
+
+**Features:**
+- Multiple shortcut support with priority handling
+- Form field detection and shortcut suppression
+- Configurable modifier key combinations
+- Debug logging and accessibility support
+- Custom event target support
+- Performance optimized with useCallback
+- **SSR Compatible** - Safe for server-side rendering
+
+**Usage:**
+```tsx
+import { useKeyboardShortcuts, useKeyboardShortcut } from './hooks/useKeyboardShortcuts';
+
+// Single shortcut
+useKeyboardShortcut('r', () => startRecording(), {
+  enabled: !isRecording,
+  description: 'Start recording',
+  priority: 1
+});
+
+// Multiple shortcuts
+useKeyboardShortcuts([
+  {
+    key: 'r',
+    description: 'Start recording',
+    callback: () => startRecording(),
+    enabled: !isRecording
+  },
+  {
+    key: 'Escape',
+    description: 'Stop recording',
+    callback: () => stopRecording(),
+    enabled: isRecording
+  }
+], {
+  debug: true,
+  ignoreFormFields: true
+});
+```
 
 ### Utilities
 
