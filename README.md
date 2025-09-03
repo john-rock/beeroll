@@ -9,8 +9,6 @@ A modern, privacy-focused screen recording application built with Next.js and Ty
 - **🎵 Audio Support**: Record system audio and microphone simultaneously
 - **⌨️ Keyboard Shortcuts**: Quick start recording with the 'R' key
 - **🌙 Dark Mode**: Beautiful dark/light theme support
-- **📱 Responsive**: Works on desktop and tablet devices
-- **♿ Accessible**: Built with accessibility best practices
 
 ## 🚀 Getting Started
 
@@ -357,24 +355,6 @@ const config = getQualityConfig('balanced');
 saveQualityPreset('high');
 ```
 
-## 🎨 Design System
-
-### Color Palette
-- **Primary**: Indigo (#4F46E5)
-- **Success**: Green (#10B981)
-- **Warning**: Yellow (#F59E0B)
-- **Error**: Red (#EF4444)
-- **Neutral**: Gray scale with dark mode support
-
-### Typography
-- **Headings**: Inter font family
-- **Body**: System font stack
-- **Monospace**: For timers and technical information
-
-### Spacing
-- Consistent 4px base unit system
-- Responsive spacing using Tailwind CSS utilities
-
 ## ♿ Accessibility Features
 
 - **ARIA Labels**: Comprehensive screen reader support
@@ -429,7 +409,6 @@ When creating or modifying components:
 3. **Performance**: Use `useCallback` and `useMemo` appropriately
 4. **Error Handling**: Implement proper error boundaries
 5. **Testing**: Add unit tests for complex logic
-6. **Responsive**: Ensure mobile-friendly design
 
 ## 📄 License
 
