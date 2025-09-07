@@ -126,7 +126,7 @@ export function AudioControls({
       <div className="space-y-3">
         <h3 
           id="audio-sources-heading"
-          className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300"
+          className="text-sm font-medium text-retro-brown dark:text-retro-brown transition-colors duration-300"
         >
           Audio Sources
         </h3>
@@ -139,18 +139,18 @@ export function AudioControls({
             checked={audioOptions.system}
             onChange={(e) => handleSystemAudioChange(e.target.checked)}
             disabled={disabled}
-            className="w-4 h-4 text-indigo-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+            className="w-4 h-4 text-retro-orange bg-retro-cream dark:bg-retro-cream border-retro-accent dark:border-retro-accent rounded focus:ring-2 focus:ring-retro-orange focus:ring-offset-2 dark:focus:ring-offset-retro-warm-white"
             aria-describedby="system-audio-description"
           />
           <label 
             htmlFor="system-audio" 
-            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300 cursor-pointer"
+            className="text-sm font-medium text-retro-brown dark:text-retro-brown flex items-center space-x-2 transition-colors duration-300 cursor-pointer"
           >
             <Volume2 className="w-4 h-4" aria-hidden="true" />
             <span>System Audio</span>
           </label>
         </div>
-        <p id="system-audio-description" className="text-xs sr-only text-gray-500 dark:text-gray-400 ml-7">
+        <p id="system-audio-description" className="text-xs sr-only text-retro-muted dark:text-retro-muted ml-7">
           Record audio from your computer&apos;s speakers and applications
         </p>
 
@@ -162,18 +162,18 @@ export function AudioControls({
             checked={audioOptions.microphone}
             onChange={(e) => handleMicrophoneChange(e.target.checked)}
             disabled={disabled}
-            className="w-4 h-4 text-indigo-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+            className="w-4 h-4 text-retro-orange bg-retro-cream dark:bg-retro-cream border-retro-accent dark:border-retro-accent rounded focus:ring-2 focus:ring-retro-orange focus:ring-offset-2 dark:focus:ring-offset-retro-warm-white"
             aria-describedby="microphone-audio-description"
           />
           <label 
             htmlFor="microphone-audio" 
-            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2 transition-colors duration-300 cursor-pointer"
+            className="text-sm font-medium text-retro-brown dark:text-retro-brown flex items-center space-x-2 transition-colors duration-300 cursor-pointer"
           >
             <Mic className="w-4 h-4" aria-hidden="true" />
             <span>Microphone</span>
           </label>
         </div>
-        <p id="microphone-audio-description" className="text-xs sr-only text-gray-500 dark:text-gray-400 ml-7">
+        <p id="microphone-audio-description" className="text-xs sr-only text-retro-muted dark:text-retro-muted ml-7">
           Record audio from your microphone input
         </p>
 
@@ -241,17 +241,17 @@ export function AudioControls({
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-3">
+          <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-lg p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" aria-hidden="true" />
-                <span className="text-sm text-red-700 dark:text-red-300">
+                <AlertTriangle className="w-4 h-4 text-retro-orange dark:text-retro-orange" aria-hidden="true" />
+                <span className="text-sm text-retro-brown dark:text-retro-brown">
                   {error}
                 </span>
               </div>
               <button
                 onClick={handleRetryLoadDevices}
-                className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 underline"
+                className="text-xs text-retro-orange dark:text-retro-orange hover:text-retro-orange-hover dark:hover:text-retro-orange-hover underline"
                 aria-label="Retry loading audio devices"
               >
                 Retry
@@ -262,10 +262,10 @@ export function AudioControls({
 
         {/* No audio warning */}
         {!audioOptions.system && !audioOptions.microphone && (
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3">
+          <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-lg p-3">
             <div className="flex items-center space-x-2">
-              <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400" aria-hidden="true" />
-              <span className="text-sm text-yellow-700 dark:text-yellow-300">
+              <AlertTriangle className="w-4 h-4 text-retro-orange dark:text-retro-orange" aria-hidden="true" />
+              <span className="text-sm text-retro-brown dark:text-retro-brown">
                 No audio sources selected. Recording will be silent.
               </span>
             </div>

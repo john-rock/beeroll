@@ -146,13 +146,13 @@ export function RecordingPreview({
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors duration-300 ${className}`}>
+    <div className={`bg-retro-warm-white dark:bg-retro-warm-white rounded-lg shadow-lg p-6 transition-colors duration-300 ${className}`}>
       {/* Header */}
       <header className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <h2 className="text-2xl font-bold text-retro-brown dark:text-retro-brown mb-2">
           Recording Complete!
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-retro-muted dark:text-retro-muted">
           Your screen recording is ready. Preview it below and choose what to do next.
         </p>
       </header>
@@ -223,7 +223,7 @@ export function RecordingPreview({
       <section className="flex space-x-3" aria-label="Recording Actions">
         <button
           onClick={handleDownload}
-          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform"
+          className="flex-1 bg-retro-orange hover:bg-retro-orange-hover text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform"
           aria-label="Download recording"
         >
           <Download className="w-5 h-5" aria-hidden="true" />
@@ -232,7 +232,7 @@ export function RecordingPreview({
 
         <button
           onClick={handleRerecord}
-          className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+          className="flex-1 bg-retro-accent hover:bg-retro-warm-brown text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
           aria-label="Start a new recording"
         >
           <RotateCcw className="w-5 h-5" aria-hidden="true" />
@@ -241,7 +241,7 @@ export function RecordingPreview({
 
         <button
           onClick={handleDelete}
-          className="bg-red-600 flex-1 space-x-2 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+          className="bg-retro-muted hover:bg-retro-warm-brown flex-1 space-x-2 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
           title="Delete recording"
           aria-label="Delete recording permanently"
         >

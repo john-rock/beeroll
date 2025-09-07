@@ -7,7 +7,8 @@ import { downloadBlob, generateFilename, formatFileSize } from '../utils/fileDow
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
-import { Play, ChevronDown, Pause, RotateCw, Save, Settings, Zap } from 'lucide-react';
+import { Header } from './Header';
+import { Play, ChevronDown, Save, Settings, Zap, Shield, Infinity, Users, Camera, Code } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -39,8 +40,6 @@ export function ScreenRecorder() {
     error,
     startRecording,
     stopRecording,
-    pauseRecording,
-    resumeRecording,
     clearError,
   } = useScreenRecording();
 
@@ -63,7 +62,6 @@ export function ScreenRecorder() {
 
   // Memoized state computations for performance
   const isRecording = useMemo(() => recordingState === 'recording', [recordingState]);
-  const isPaused = useMemo(() => recordingState === 'paused', [recordingState]);
   const isInactive = useMemo(() => recordingState === 'inactive', [recordingState]);
   const hasRecordedVideo = useMemo(() => recordedVideo !== null, [recordedVideo]);
 
@@ -203,316 +201,463 @@ export function ScreenRecorder() {
 
   return (
     <div 
-      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white p-4 sm:p-8 transition-all duration-300"
+      className="min-h-screen bg-gradient-to-br from-retro-cream to-retro-warm-white dark:from-retro-cream dark:to-retro-warm-white text-retro-brown dark:text-retro-brown transition-all duration-300"
       role="main"
       aria-label="Screen Recording Application"
     >
+      {/* Header */}
+      <Header />
+
       {hasRecordedVideo ? (
         // Show preview after recording
-        <div className="max-w-3xl w-full">
-          <RecordingPreview
-            videoBlob={recordedVideo!}
-            duration={recordedDuration}
-            onDownload={handleDownload}
-            onDelete={handleDelete}
-            onRerecord={handleRerecord}
-          />
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <RecordingPreview
+              videoBlob={recordedVideo!}
+              duration={recordedDuration}
+              onDownload={handleDownload}
+              onDelete={handleDelete}
+              onRerecord={handleRerecord}
+            />
+          </div>
         </div>
       ) : (
-        // Show recording interface
-        <div className="max-w-lg w-full space-y-8 relative">
-          {/* Header */}
-          <header className="text-center space-y-4">
-            <h1 className="text-6xl font-bold text-black dark:text-white bg-clip-text border-4 rounded-3xl dark:border-white inline-block px-6 pb-1 transition-all duration-300">
-              beeroll
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed transition-colors duration-300">
-              Screen recording at 60fps. Local-first, private, instant.
-            </p>
-          </header>
-
-          {/* Recording Status */}
-          {(isRecording || isPaused) && (
-            <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-2 border-red-200 dark:border-red-700 rounded-lg p-6 shadow-lg">
-              <RecordingStatus 
-                isRecording={isRecording}
-                isPaused={isPaused}
-                duration={duration}
-                className="scale-110"
-              />
-            </div>
-          )}
-
-          {/* Main Controls */}
-          <section className="flex flex-col space-y-4 mb-20" aria-label="Recording Controls">
-            {isInactive && (
-              <button
-                onClick={handleStartRecording}
-                className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                disabled={isProcessing}
-                data-plausible="start-recording"
-                aria-label="Start screen recording"
-              >
-                <div className="flex items-center justify-center space-x-3">
-                  <Play className="w-5 h-5" aria-hidden="true" />
-                  <span className="text-xl font-normal">Start Recording</span>
+        <>
+          {/* Hero Section */}
+          <section className="container mx-auto px-4 py-8 lg:py-16">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[80vh]">
+              {/* Left Side - Privacy Messaging & Trust Building */}
+              <div className="space-y-8">
+                {/* Privacy Badge */}
+                <div className="inline-flex items-center space-x-2 bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-full px-4 py-2 shadow-sm">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium text-retro-brown dark:text-retro-brown">100% Private</span>
                 </div>
-              </button>
-            )}
 
-            {isInactive && (
-              <div className="flex items-center justify-center space-x-2 text-gray-500 dark:text-gray-500 text-xs transition-colors duration-300">
-                <span>Or press</span>
-                <kbd className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300 font-mono text-xs border border-gray-300 dark:border-gray-600">
-                  R
-                </kbd>
-                <span>to start</span>
-              </div>
-            )}
-
-            {(isRecording || isPaused) && (
-              <div className="space-y-4">
-                {/* Main Recording Controls */}
-                <div className="grid grid-cols-2 gap-3">
-                  {isRecording && (
-                    <button
-                      onClick={pauseRecording}
-                      className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-                      aria-label="Pause recording"
-                    >
-                      <Pause className="w-4 h-4" aria-hidden="true" />
-                      <span>Pause</span>
-                    </button>
-                  )}
-
-                  {isPaused && (
-                    <button
-                      onClick={resumeRecording}
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-                      aria-label="Resume recording"
-                    >
-                      <RotateCw className="w-4 h-4" aria-hidden="true" />
-                      <span>Resume</span>
-                    </button>
-                  )}
-
-                  <button
-                    onClick={handleStopRecording}
-                    disabled={isProcessing}
-                    className="col-span-1 bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform disabled:transform-none"
-                    aria-label="Stop recording and save"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
-                        <span>
-                          {compressionProgress ? compressionProgress.stage : 'Processing...'}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Save aria-hidden="true" />
-                        <span>Stop & Save</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            )}
-          </section>
-
-          {/* Compression Progress */}
-          {compressionProgress && (
-            <div className="bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-lg p-6 shadow-lg transition-all duration-300">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
-                    <span className="text-indigo-700 dark:text-indigo-300 font-semibold">
-                      {compressionProgress.stage}
-                    </span>
-                  </div>
-                  <span className="text-indigo-600 dark:text-indigo-400 text-lg font-bold">
-                    {Math.round(compressionProgress.progress)}%
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <div className="w-full bg-indigo-200 dark:bg-indigo-800 rounded-full h-3 shadow-inner">
-                    <div 
-                      className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
-                      style={{ width: `${compressionProgress.progress}%` }}
-                      role="progressbar"
-                      aria-valuenow={compressionProgress.progress}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-label="Compression progress"
-                    />
-                  </div>
-                  <p className="text-indigo-600 dark:text-indigo-400 text-sm text-center">
-                    Optimizing your recording for the best quality and file size...
+                {/* Main Headline */}
+                <div className="space-y-4">
+                  <h1 className="text-4xl lg:text-6xl font-bold text-retro-brown dark:text-retro-brown leading-tight">
+                  Private screen recording
+                  </h1>
+                  <p className="text-xl lg:text-2xl text-retro-muted dark:text-retro-muted leading-relaxed">
+                    Record directly in your browser. Your recordings never leave your device.
                   </p>
                 </div>
-              </div>
-            </div>
-          )}
 
-          {/* Compression Result */}
-          {compressionResult && (
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-lg p-6 shadow-lg transition-all duration-300">
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                {/* Trust Signals */}
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-retro-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-retro-brown dark:text-retro-brown">No uploads, no servers</h3>
+                      <p className="text-retro-muted dark:text-retro-muted text-sm">Everything happens locally in your browser</p>
+                    </div>
                   </div>
-                  <h4 className="text-green-700 dark:text-green-300 font-semibold text-lg">Compression Complete!</h4>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Original Size</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{formatFileSize(compressionResult.originalSize)}</div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-retro-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-retro-brown dark:text-retro-brown">Free & unlimited</h3>
+                      <p className="text-retro-muted dark:text-retro-muted text-sm">No time limits, no watermarks, no accounts</p>
+                    </div>
                   </div>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Compressed Size</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{formatFileSize(compressionResult.compressedSize)}</div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-retro-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-retro-brown dark:text-retro-brown">Built for teams</h3>
+                      <p className="text-retro-muted dark:text-retro-muted text-sm">Perfect for code reviews, bug reports, and async communication</p>
+                    </div>
                   </div>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Space Saved</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{compressionResult.compressionRatio.toFixed(1)}%</div>
-                  </div>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Processing Time</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{(compressionResult.processingTime / 1000).toFixed(1)}s</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Error Display */}
-          <ErrorDisplay 
-            error={error}
-            onRetry={error?.recoverable ? handleStartRecording : undefined}
-            onDismiss={clearError}
-          />
-
-          {/* Compatibility Warnings */}
-          {compatibilityIssues.length > 0 && (
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-6 shadow-lg transition-all duration-300">
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-yellow-700 dark:text-yellow-300 mb-3">
-                    Browser Compatibility Notice
-                  </h3>
-                  <ul className="space-y-2">
-                    {compatibilityIssues.map((issue, index) => (
-                      <li key={index} className="flex items-start space-x-2">
-                        <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></span>
-                        <span className="text-sm text-yellow-600 dark:text-yellow-400 leading-relaxed">{issue}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </div>
-            </div>
-          )}
 
-          {/* Recording Settings */}
-          {isInactive && (
-            <section className="space-y-6" aria-label="Recording Settings">
-              {/* Quick Settings Card */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 space-y-6 transition-all duration-300 hover:shadow-xl">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
-                    <Settings className="w-5 h-5" aria-hidden="true" />
-                    <span>Quick Settings</span>
-                  </h3>
-                </div>
-
-                {/* Quality Selector */}
-                <div className="space-y-3">
-                  <label htmlFor="quality-selector" className="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                    Recording Quality
-                  </label>
-                  <select
-                    id="quality-selector"
-                    value={selectedQuality}
-                    onChange={(e) => handleQualityChange(e.target.value as QualityPreset)}
-                    className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all duration-300 hover:border-indigo-600"
-                    aria-describedby="quality-description"
-                  >
-                    {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
-                      <option key={key} value={key}>
-                        {config.description}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Audio Controls */}
-                <AudioControls
-                  audioOptions={audioOptions}
-                  onAudioOptionsChange={handleAudioOptionsChange}
-                  disabled={false}
-                />
-              </div>
-
-              {/* Advanced Settings Card */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
-                <button
-                  onClick={toggleAdvancedSettings}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
-                  aria-expanded={showAdvancedSettings}
-                  aria-controls="advanced-settings-content"
-                >
-                  <div className="flex items-center space-x-3">
-                    <Zap className="w-5 h-5" aria-hidden="true" />
-                    <span className="text-lg font-semibold text-gray-900 dark:text-white">Advanced Settings</span>
+              {/* Right Side - Recording Controls */}
+              <div className="space-y-8">
+                {/* Recording Status */}
+                {isRecording && (
+                  <div className="bg-gradient-to-r from-retro-warm-white to-retro-cream dark:from-retro-warm-white dark:to-retro-cream border-2 border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg">
+                    <RecordingStatus 
+                      isRecording={isRecording}
+                      duration={duration}
+                      className="scale-110"
+                    />
                   </div>
-                  <ChevronDown 
-                    className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`}
-                    aria-hidden="true"
-                  />
-                </button>
-                
-                {showAdvancedSettings && (
-                  <div id="advanced-settings-content" className="px-6 pb-6 space-y-4 border-t border-gray-200 dark:border-gray-700 pt-6">
-                    {/* Compression Settings */}
-                    <div className="space-y-4">
-                      <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 flex items-center space-x-2">
-                        <span>Compression</span>
-                      </h4>
-                      <div className="flex items-start space-x-3">
-                        <input
-                          type="checkbox"
-                          id="enable-compression"
-                          checked={useCompression}
-                          onChange={(e) => toggleCompression(e.target.checked)}
-                          className="w-4 h-4 text-indigo-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded mt-1.5"
-                          aria-describedby="compression-description"
-                        />
-                        <div className="flex-1">
-                          <label htmlFor="enable-compression" className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300 cursor-pointer">
-                            Enable advanced compression
-                          </label>
-                          <p id="compression-description" className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            Uses FFmpeg.wasm for real video compression. Reduces file size with VP9 encoding. Processing may take longer.
-                          </p>
+                )}
+
+                {/* Main Recording Button */}
+                <div className="space-y-4">
+                  {isInactive && (
+                    <div className="space-y-2">
+                      <button
+                        onClick={handleStartRecording}
+                        className="group w-full bg-retro-orange hover:bg-retro-orange-hover text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-xl"
+                        disabled={isProcessing}
+                        data-plausible="start-recording"
+                        aria-label="Start screen recording"
+                      >
+                        <div className="flex items-center justify-center space-x-3">
+                          <Play className="w-6 h-6" aria-hidden="true" />
+                          <span>Start Recording</span>
                         </div>
+                      </button>
+                      <p className="text-center text-sm text-retro-muted dark:text-retro-muted">
+                        or press <kbd className="px-1.5 py-0.5 bg-retro-warm-white dark:bg-retro-warm-white rounded text-retro-brown dark:text-retro-brown font-mono text-xs border border-retro-accent dark:border-retro-accent">R</kbd>
+                      </p>
+                    </div>
+                  )}
+
+                  {isRecording && (
+                    <button
+                      onClick={handleStopRecording}
+                      disabled={isProcessing}
+                      className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:cursor-not-allowed text-white font-semibold py-6 px-8 rounded-lg transition-all duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl transform disabled:transform-none text-xl"
+                      aria-label="Stop recording and save"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
+                          <span>
+                            {compressionProgress ? compressionProgress.stage : 'Processing...'}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-5 h-5" aria-hidden="true" />
+                          <span>Stop & Save</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+
+                {/* All Settings in Hero */}
+                {isInactive && (
+                  <div className="space-y-6">
+                    {/* Quick Settings */}
+                    <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg shadow-lg border border-retro-accent dark:border-retro-accent p-6 space-y-6">
+                      <h3 className="text-lg font-semibold text-retro-brown dark:text-retro-brown flex items-center space-x-2">
+                        <Settings className="w-5 h-5" aria-hidden="true" />
+                        <span>Recording Settings</span>
+                      </h3>
+
+                      {/* Quality Selector */}
+                      <div className="space-y-3">
+                        <label htmlFor="quality-selector" className="block text-sm font-medium text-retro-brown dark:text-retro-brown">
+                          Recording Quality
+                        </label>
+                        <select
+                          id="quality-selector"
+                          value={selectedQuality}
+                          onChange={(e) => handleQualityChange(e.target.value as QualityPreset)}
+                          className="w-full bg-retro-cream dark:bg-retro-cream border border-retro-accent dark:border-retro-accent rounded-lg px-4 py-3 text-retro-brown dark:text-retro-brown focus:outline-none focus:ring-2 focus:ring-retro-orange focus:border-transparent transition-all duration-300 hover:border-retro-orange"
+                        >
+                          {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
+                            <option key={key} value={key}>
+                              {config.description}
+                            </option>
+                          ))}
+                        </select>
                       </div>
+
+                      {/* Audio Controls */}
+                      <AudioControls
+                        audioOptions={audioOptions}
+                        onAudioOptionsChange={handleAudioOptionsChange}
+                        disabled={false}
+                      />
+                    </div>
+
+                    {/* Advanced Settings */}
+                    <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg shadow-lg border border-retro-accent dark:border-retro-accent">
+                      <button
+                        onClick={toggleAdvancedSettings}
+                        className="w-full flex items-center justify-between p-6 text-left hover:bg-retro-cream dark:hover:bg-retro-cream rounded-lg transition-colors duration-200"
+                        aria-expanded={showAdvancedSettings}
+                        aria-controls="advanced-settings-content"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <Zap className="w-5 h-5" aria-hidden="true" />
+                          <span className="text-lg font-semibold text-retro-brown dark:text-retro-brown">Advanced Settings</span>
+                        </div>
+                        <ChevronDown 
+                          className={`w-5 h-5 text-retro-muted dark:text-retro-muted transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      
+                      {showAdvancedSettings && (
+                        <div id="advanced-settings-content" className="px-6 pb-6 space-y-4 border-t border-retro-accent dark:border-retro-accent pt-6">
+                          {/* Compression Settings */}
+                          <div className="space-y-4">
+                            <h4 className="text-md font-medium text-retro-brown dark:text-retro-brown">
+                              Compression
+                            </h4>
+                            <div className="flex items-start space-x-3">
+                              <input
+                                type="checkbox"
+                                id="enable-compression"
+                                checked={useCompression}
+                                onChange={(e) => toggleCompression(e.target.checked)}
+                                className="w-4 h-4 text-retro-orange bg-retro-cream dark:bg-retro-cream border-retro-accent dark:border-retro-accent rounded mt-1.5 focus:ring-retro-orange"
+                                aria-describedby="compression-description"
+                              />
+                              <div className="flex-1">
+                                <label htmlFor="enable-compression" className="text-sm font-medium text-retro-brown dark:text-retro-brown cursor-pointer">
+                                  Enable advanced compression
+                                </label>
+                                <p id="compression-description" className="text-xs text-retro-muted dark:text-retro-muted mt-1">
+                                  Uses FFmpeg.wasm for real video compression. Reduces file size with VP9 encoding. Processing may take longer but happens locally.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Status Messages */}
+                {isRecording && (
+                  <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-lg p-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm text-retro-brown dark:text-retro-brown font-medium">
+                        Recording locally - your privacy is protected
+                      </span>
                     </div>
                   </div>
                 )}
               </div>
+            </div>
+          </section>
+
+          {/* Compression Progress */}
+          {compressionProgress && (
+            <section className="container mx-auto px-4 pb-8">
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 border-2 border-retro-orange border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
+                        <span className="text-retro-brown dark:text-retro-brown font-semibold">
+                          {compressionProgress.stage}
+                        </span>
+                      </div>
+                      <span className="text-retro-orange dark:text-retro-orange text-lg font-bold">
+                        {Math.round(compressionProgress.progress)}%
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="w-full bg-retro-muted/30 dark:bg-retro-muted/30 rounded-full h-3 shadow-inner">
+                        <div 
+                          className="bg-gradient-to-r from-retro-orange to-retro-orange-hover h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
+                          style={{ width: `${compressionProgress.progress}%` }}
+                          role="progressbar"
+                          aria-valuenow={compressionProgress.progress}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-label="Compression progress"
+                        />
+                      </div>
+                      <p className="text-retro-muted dark:text-retro-muted text-sm text-center">
+                        Optimizing your recording locally - still completely private
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </section>
           )}
-        </div>
+
+          {/* Compression Result */}
+          {compressionResult && (
+            <section className="container mx-auto px-4 pb-8">
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-retro-orange rounded-full flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <h4 className="text-retro-brown dark:text-retro-brown font-semibold text-lg">Compression Complete!</h4>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                        <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Original Size</div>
+                        <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{formatFileSize(compressionResult.originalSize)}</div>
+                      </div>
+                      <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                        <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Compressed Size</div>
+                        <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{formatFileSize(compressionResult.compressedSize)}</div>
+                      </div>
+                      <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                        <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Space Saved</div>
+                        <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{compressionResult.compressionRatio.toFixed(1)}%</div>
+                      </div>
+                      <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                        <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Processing Time</div>
+                        <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{(compressionResult.processingTime / 1000).toFixed(1)}s</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Error Display */}
+          {error && (
+            <section className="container mx-auto px-4 pb-8">
+              <div className="max-w-2xl mx-auto">
+                <ErrorDisplay 
+                  error={error}
+                  onRetry={error?.recoverable ? handleStartRecording : undefined}
+                  onDismiss={clearError}
+                />
+              </div>
+            </section>
+          )}
+
+          {/* Compatibility Warnings */}
+          {compatibilityIssues.length > 0 && (
+            <section className="container mx-auto px-4 pb-8">
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-orange dark:border-retro-orange rounded-lg p-6 shadow-lg">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-10 h-10 bg-retro-orange rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-retro-brown dark:text-retro-brown mb-3">
+                        Browser Compatibility Notice
+                      </h3>
+                      <ul className="space-y-2">
+                        {compatibilityIssues.map((issue, index) => (
+                          <li key={index} className="flex items-start space-x-2">
+                            <span className="w-1.5 h-1.5 bg-retro-orange rounded-full mt-2 flex-shrink-0"></span>
+                            <span className="text-sm text-retro-muted dark:text-retro-muted leading-relaxed">{issue}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Features Section */}
+          <section className="container mx-auto px-4 py-16 border-t border-retro-accent dark:border-retro-accent">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl lg:text-4xl font-bold text-retro-brown dark:text-retro-brown mb-4">
+                  Why choose beeroll?
+                </h2>
+                <p className="text-xl text-retro-muted dark:text-retro-muted max-w-2xl mx-auto">
+                  The privacy-first screen recorder that doesn&apos;t compromise on features
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Privacy First */}
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
+                  <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
+                    <Shield className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
+                    100% Private
+                  </h3>
+                  <p className="text-retro-muted dark:text-retro-muted leading-relaxed">
+                    Your recordings never leave your device. No cloud uploads, no data collection, no tracking.
+                  </p>
+                </div>
+
+                {/* No Limits */}
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
+                  <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
+                    <Infinity className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
+                    No Limits
+                  </h3>
+                  <p className="text-retro-muted dark:text-retro-muted leading-relaxed">
+                    Record for as long as you need. No time restrictions, no watermarks, no premium features.
+                  </p>
+                </div>
+
+                {/* Built for Teams */}
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
+                  <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
+                    Built for Teams
+                  </h3>
+                  <p className="text-retro-muted dark:text-retro-muted leading-relaxed">
+                    Perfect for code reviews, bug reports, and async communication. Works in every tool your team already uses.
+                  </p>
+                </div>
+
+                {/* High Quality */}
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
+                  <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
+                    <Camera className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
+                    Crystal Clear
+                  </h3>
+                  <p className="text-retro-muted dark:text-retro-muted leading-relaxed">
+                    Multiple quality presets with smart compression. Get the perfect balance of quality and file size.
+                  </p>
+                </div>
+
+                {/* Easy to Use */}
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
+                  <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
+                    Lightning Fast
+                  </h3>
+                  <p className="text-retro-muted dark:text-retro-muted leading-relaxed">
+                    One click to start recording. Keyboard shortcuts for power users. Instant downloads when done.
+                  </p>
+                </div>
+
+                {/* Open Source */}
+                <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
+                  <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
+                    <Code className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
+                    Transparent
+                  </h3>
+                  <p className="text-retro-muted dark:text-retro-muted leading-relaxed">
+                    Open source and transparent. Inspect the code, contribute features, or host it yourself.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </>
       )}
     </div>
   );

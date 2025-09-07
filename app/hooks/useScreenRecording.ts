@@ -26,7 +26,6 @@ interface UseScreenRecordingConfig {
  * Features:
  * - Screen capture with quality presets
  * - Audio mixing (system + microphone)
- * - Pause/resume functionality
  * - Automatic cleanup and error handling
  * - Timer management and status tracking
  * - Mute controls and audio level management
@@ -42,8 +41,6 @@ interface UseScreenRecordingConfig {
  *   error,
  *   startRecording,
  *   stopRecording,
- *   pauseRecording,
- *   resumeRecording
  * } = useScreenRecording({
  *   onError: (error) => console.error('Recording error:', error),
  *   onStateChange: (state) => console.log('State changed to:', state)
@@ -269,48 +266,6 @@ export function useScreenRecording(config: UseScreenRecordingConfig = {}) {
   // Update the ref whenever stopRecording changes
   stopRecordingRef.current = stopRecording;
 
-  /**
-   * Pause the current recording
-   */
-  const pauseRecording = useCallback(() => {
-    const mediaRecorder = mediaRecorderRef.current;
-    if (mediaRecorder && mediaRecorder.state === 'recording') {
-      try {
-        mediaRecorder.pause();
-        const newState: RecordingState = 'paused';
-        setRecordingState(newState);
-        
-        if (timerRef.current) {
-          clearInterval(timerRef.current);
-          timerRef.current = null;
-        }
-        
-        onStateChange?.(newState);
-      } catch (err) {
-        console.warn('Failed to pause recording:', err);
-      }
-    }
-  }, [onStateChange]);
-
-  /**
-   * Resume a paused recording
-   */
-  const resumeRecording = useCallback(() => {
-    const mediaRecorder = mediaRecorderRef.current;
-    if (mediaRecorder && mediaRecorder.state === 'paused') {
-      try {
-        mediaRecorder.resume();
-        const newState: RecordingState = 'recording';
-        setRecordingState(newState);
-        
-        timerRef.current = setInterval(updateTimer, 1000);
-        
-        onStateChange?.(newState);
-      } catch (err) {
-        console.warn('Failed to resume recording:', err);
-      }
-    }
-  }, [updateTimer, onStateChange]);
 
   /**
    * Get the current recording status
@@ -319,7 +274,6 @@ export function useScreenRecording(config: UseScreenRecordingConfig = {}) {
    */
   const getStatus = useCallback((): RecordingStatus => ({
     isRecording: recordingState === 'recording',
-    isPaused: recordingState === 'paused',
     duration,
     startTime: startTimeRef.current,
   }), [recordingState, duration]);
@@ -403,17 +357,9 @@ export function useScreenRecording(config: UseScreenRecordingConfig = {}) {
    * Check if recording is currently active
    */
   const isRecording = useCallback(() => {
-    return recordingState === 'recording' || recordingState === 'paused';
+    return recordingState === 'recording';
   }, [recordingState]);
 
-  /**
-   * Check if recording can be paused/resumed
-   */
-  const canPauseResume = useCallback(() => {
-    return mediaRecorderRef.current && 
-           (mediaRecorderRef.current.state === 'recording' || 
-            mediaRecorderRef.current.state === 'paused');
-  }, []);
 
   // Auto-cleanup on unmount
   useEffect(() => {
@@ -432,14 +378,11 @@ export function useScreenRecording(config: UseScreenRecordingConfig = {}) {
     isMuted,
     startRecording,
     stopRecording,
-    pauseRecording,
-    resumeRecording,
     getStatus,
     clearError,
     toggleMute,
     setAudioLevel,
     cleanup,
     isRecording,
-    canPauseResume,
   };
 }

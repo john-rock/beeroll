@@ -35,7 +35,7 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       onKeyDown={handleKeyDown}
-      className="fixed bottom-6 right-6 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl z-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+      className="fixed bottom-6 right-6 p-3 rounded-full bg-retro-warm-white/90 dark:bg-retro-warm-white/90 backdrop-blur-sm border border-retro-accent dark:border-retro-accent text-retro-brown dark:text-retro-brown hover:bg-retro-warm-white dark:hover:bg-retro-warm-white transition-all duration-200 shadow-lg hover:shadow-xl z-50 focus:outline-none focus:ring-2 focus:ring-retro-accent focus:ring-offset-2 dark:focus:ring-offset-retro-cream"
       title={`Switch to ${nextTheme} mode`}
       aria-label={`Switch to ${nextTheme} mode. Currently using ${currentTheme} mode.`}
       role="button"

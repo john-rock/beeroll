@@ -3,41 +3,81 @@
 /* Custom dark mode variant for manual toggle */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Default light theme */
+/* Default light theme - Retro off-white */
 :root {
-  --background: #f3f4f6;
-  --foreground: #111827;
+  --background: #faf8f4;
+  --foreground: #2c2518;
+  --retro-cream: #faf8f4;
+  --retro-warm-white: #f7f4ed;
+  --retro-brown: #2c2518;
+  --retro-warm-brown: #3d2e1f;
+  --retro-accent: #8b5a3c;
+  --retro-muted: #6b5b4a;
+  --retro-orange: #d97142;
+  --retro-orange-hover: #c15e32;
 }
 
 /* Explicit light theme */
 .light {
-  --background: #f3f4f6;
-  --foreground: #111827;
+  --background: #faf8f4;
+  --foreground: #2c2518;
+  --retro-cream: #faf8f4;
+  --retro-warm-white: #f7f4ed;
+  --retro-brown: #2c2518;
+  --retro-warm-brown: #3d2e1f;
+  --retro-accent: #8b5a3c;
+  --retro-muted: #6b5b4a;
+  --retro-orange: #d97142;
+  --retro-orange-hover: #c15e32;
 }
 
-/* Dark mode styles */
+/* Dark mode styles - Retro warm dark */
 .dark {
-  --background: #111827;
-  --foreground: #f9fafb;
+  --background: #1a1611;
+  --foreground: #f0ebe1;
+  --retro-cream: #1a1611;
+  --retro-warm-white: #252017;
+  --retro-brown: #f0ebe1;
+  --retro-warm-brown: #e8ddc7;
+  --retro-accent: #d4a574;
+  --retro-muted: #b39980;
+  --retro-orange: #e88960;
+  --retro-orange-hover: #f09968;
 }
 
 /* System preference support as fallback (only when no explicit class is set) */
 @media (prefers-color-scheme: dark) {
   :root:not(.dark):not(.light) {
-    --background: #111827;
-    --foreground: #f9fafb;
+    --background: #1a1611;
+    --foreground: #f0ebe1;
+    --retro-cream: #1a1611;
+    --retro-warm-white: #252017;
+    --retro-brown: #f0ebe1;
+    --retro-warm-brown: #e8ddc7;
+    --retro-accent: #d4a574;
+    --retro-muted: #b39980;
+    --retro-orange: #e88960;
+    --retro-orange-hover: #f09968;
   }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-outfit);
+  --color-retro-cream: var(--retro-cream);
+  --color-retro-warm-white: var(--retro-warm-white);
+  --color-retro-brown: var(--retro-brown);
+  --color-retro-warm-brown: var(--retro-warm-brown);
+  --color-retro-accent: var(--retro-accent);
+  --color-retro-muted: var(--retro-muted);
+  --color-retro-orange: var(--retro-orange);
+  --color-retro-orange-hover: var(--retro-orange-hover);
+  --font-sans: var(--font-fraunces);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-outfit), Arial, Helvetica, sans-serif;
+  font-family: var(--font-fraunces), Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
