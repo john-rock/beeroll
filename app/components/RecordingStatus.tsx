@@ -75,7 +75,7 @@ export function RecordingStatus({
       {/* Duration Timer */}
       <div className="relative">
         <div 
-          className="text-4xl font-mono font-bold text-gray-900 dark:text-white transition-colors duration-300"
+          className="text-4xl font-mono font-bold text-retro-brown dark:text-retro-brown transition-colors duration-300"
           aria-label={`Recording duration: ${formatDuration(duration)}`}
         >
           {formatDuration(duration)}
@@ -95,13 +95,13 @@ export function RecordingStatus({
       {/* Recording Progress Bar */}
       {(isRecording || isPaused) && (
         <div className="w-full max-w-xs mx-auto">
-          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+          <div className="flex justify-between text-xs text-retro-muted dark:text-retro-muted mb-1">
             <span>00:00</span>
             <span>{statusText}</span>
             <span>∞</span>
           </div>
           <div 
-            className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5"
+            className="w-full bg-retro-muted/30 dark:bg-retro-muted/30 rounded-full h-1.5"
             role="progressbar"
             aria-valuenow={isRecording ? 100 : 75}
             aria-valuemin={0}
@@ -110,7 +110,7 @@ export function RecordingStatus({
           >
             <div 
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                isRecording ? 'bg-red-500' : 'bg-yellow-500'
+                isRecording ? 'bg-retro-accent' : 'bg-retro-accent/70'
               }`}
               style={{ 
                 width: isRecording ? '100%' : '75%',

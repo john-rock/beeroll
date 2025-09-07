@@ -203,7 +203,7 @@ export function ScreenRecorder() {
 
   return (
     <div 
-      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white p-4 sm:p-8 transition-all duration-300"
+      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-retro-cream to-retro-warm-white dark:from-retro-cream dark:to-retro-warm-white text-retro-brown dark:text-retro-brown p-4 sm:p-8 transition-all duration-300"
       role="main"
       aria-label="Screen Recording Application"
     >
@@ -223,17 +223,14 @@ export function ScreenRecorder() {
         <div className="max-w-lg w-full space-y-8 relative">
           {/* Header */}
           <header className="text-center space-y-4">
-            <h1 className="text-6xl font-bold text-black dark:text-white bg-clip-text border-4 rounded-3xl dark:border-white inline-block px-6 pb-1 transition-all duration-300">
-              beeroll
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed transition-colors duration-300">
+            <p className="text-lg text-retro-muted dark:text-retro-muted max-w-md mx-auto leading-relaxed transition-colors duration-300">
               Screen recording at 60fps. Local-first, private, instant.
             </p>
           </header>
 
           {/* Recording Status */}
           {(isRecording || isPaused) && (
-            <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-2 border-red-200 dark:border-red-700 rounded-lg p-6 shadow-lg">
+            <div className="bg-gradient-to-r from-retro-warm-white to-retro-cream dark:from-retro-warm-white dark:to-retro-cream border-2 border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg">
               <RecordingStatus 
                 isRecording={isRecording}
                 isPaused={isPaused}
@@ -248,7 +245,7 @@ export function ScreenRecorder() {
             {isInactive && (
               <button
                 onClick={handleStartRecording}
-                className="group w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="group w-full bg-retro-orange hover:bg-retro-orange-hover text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 disabled={isProcessing}
                 data-plausible="start-recording"
                 aria-label="Start screen recording"
@@ -261,9 +258,9 @@ export function ScreenRecorder() {
             )}
 
             {isInactive && (
-              <div className="flex items-center justify-center space-x-2 text-gray-500 dark:text-gray-500 text-xs transition-colors duration-300">
+              <div className="flex items-center justify-center space-x-2 text-retro-muted dark:text-retro-muted text-xs transition-colors duration-300">
                 <span>Or press</span>
-                <kbd className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300 font-mono text-xs border border-gray-300 dark:border-gray-600">
+                <kbd className="px-2 py-1 bg-retro-warm-white dark:bg-retro-warm-white rounded text-retro-brown dark:text-retro-brown font-mono text-xs border border-retro-accent dark:border-retro-accent">
                   R
                 </kbd>
                 <span>to start</span>
@@ -427,9 +424,9 @@ export function ScreenRecorder() {
           {isInactive && (
             <section className="space-y-6" aria-label="Recording Settings">
               {/* Quick Settings Card */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 space-y-6 transition-all duration-300 hover:shadow-xl">
+              <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg shadow-lg border border-retro-accent dark:border-retro-accent p-6 space-y-6 transition-all duration-300 hover:shadow-xl">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
+                  <h3 className="text-lg font-semibold text-retro-brown dark:text-retro-brown flex items-center space-x-2">
                     <Settings className="w-5 h-5" aria-hidden="true" />
                     <span>Quick Settings</span>
                   </h3>
@@ -437,14 +434,14 @@ export function ScreenRecorder() {
 
                 {/* Quality Selector */}
                 <div className="space-y-3">
-                  <label htmlFor="quality-selector" className="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                  <label htmlFor="quality-selector" className="block text-sm font-medium text-retro-brown dark:text-retro-brown transition-colors duration-300">
                     Recording Quality
                   </label>
                   <select
                     id="quality-selector"
                     value={selectedQuality}
                     onChange={(e) => handleQualityChange(e.target.value as QualityPreset)}
-                    className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all duration-300 hover:border-indigo-600"
+                    className="w-full bg-retro-cream dark:bg-retro-cream border border-retro-accent dark:border-retro-accent rounded-lg px-4 py-3 text-retro-brown dark:text-retro-brown focus:outline-none focus:ring-2 focus:ring-retro-orange focus:border-transparent transition-all duration-300 hover:border-retro-orange"
                     aria-describedby="quality-description"
                   >
                     {Object.entries(QUALITY_PRESETS).map(([key, config]) => (
@@ -464,28 +461,28 @@ export function ScreenRecorder() {
               </div>
 
               {/* Advanced Settings Card */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
+              <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg shadow-lg border border-retro-accent dark:border-retro-accent transition-all duration-300 hover:shadow-xl">
                 <button
                   onClick={toggleAdvancedSettings}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                  className="w-full flex items-center justify-between p-6 text-left hover:bg-retro-cream dark:hover:bg-retro-cream rounded-lg transition-colors duration-200"
                   aria-expanded={showAdvancedSettings}
                   aria-controls="advanced-settings-content"
                 >
                   <div className="flex items-center space-x-3">
                     <Zap className="w-5 h-5" aria-hidden="true" />
-                    <span className="text-lg font-semibold text-gray-900 dark:text-white">Advanced Settings</span>
+                    <span className="text-lg font-semibold text-retro-brown dark:text-retro-brown">Advanced Settings</span>
                   </div>
                   <ChevronDown 
-                    className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 text-retro-muted dark:text-retro-muted transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`}
                     aria-hidden="true"
                   />
                 </button>
                 
                 {showAdvancedSettings && (
-                  <div id="advanced-settings-content" className="px-6 pb-6 space-y-4 border-t border-gray-200 dark:border-gray-700 pt-6">
+                  <div id="advanced-settings-content" className="px-6 pb-6 space-y-4 border-t border-retro-accent dark:border-retro-accent pt-6">
                     {/* Compression Settings */}
                     <div className="space-y-4">
-                      <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 flex items-center space-x-2">
+                      <h4 className="text-md font-medium text-retro-brown dark:text-retro-brown flex items-center space-x-2">
                         <span>Compression</span>
                       </h4>
                       <div className="flex items-start space-x-3">
@@ -494,14 +491,14 @@ export function ScreenRecorder() {
                           id="enable-compression"
                           checked={useCompression}
                           onChange={(e) => toggleCompression(e.target.checked)}
-                          className="w-4 h-4 text-indigo-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded mt-1.5"
+                          className="w-4 h-4 text-retro-orange bg-retro-cream dark:bg-retro-cream border-retro-accent dark:border-retro-accent rounded mt-1.5 focus:ring-retro-orange"
                           aria-describedby="compression-description"
                         />
                         <div className="flex-1">
-                          <label htmlFor="enable-compression" className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300 cursor-pointer">
+                          <label htmlFor="enable-compression" className="text-sm font-medium text-retro-brown dark:text-retro-brown transition-colors duration-300 cursor-pointer">
                             Enable advanced compression
                           </label>
-                          <p id="compression-description" className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          <p id="compression-description" className="text-xs text-retro-muted dark:text-retro-muted mt-1">
                             Uses FFmpeg.wasm for real video compression. Reduces file size with VP9 encoding. Processing may take longer.
                           </p>
                         </div>

@@ -146,13 +146,13 @@ export function RecordingPreview({
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors duration-300 ${className}`}>
+    <div className={`bg-retro-warm-white dark:bg-retro-warm-white rounded-lg shadow-lg p-6 transition-colors duration-300 ${className}`}>
       {/* Header */}
       <header className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <h2 className="text-2xl font-bold text-retro-brown dark:text-retro-brown mb-2">
           Recording Complete!
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-retro-muted dark:text-retro-muted">
           Your screen recording is ready. Preview it below and choose what to do next.
         </p>
       </header>

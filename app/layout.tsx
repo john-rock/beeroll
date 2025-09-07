@@ -3,6 +3,7 @@ import { Fraunces } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { Logo } from "./components/Logo";
 import PlausibleProvider from 'next-plausible'
 
 const fraunces = Fraunces({
@@ -59,6 +60,9 @@ export default function RootLayout({
       >
         <PlausibleProvider domain="beeroll.app" trackFileDownloads taggedEvents>
           <ThemeProvider>
+            <div className="fixed top-4 left-4 z-40">
+              <Logo />
+            </div>
             {children}
             <ThemeToggle />
           </ThemeProvider>
