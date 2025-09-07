@@ -571,7 +571,7 @@ export function ScreenRecorder() {
                   Why choose beeroll?
                 </h2>
                 <p className="text-xl text-retro-muted dark:text-retro-muted max-w-2xl mx-auto">
-                  The privacy-first screen recorder that doesn't compromise on features
+                  The privacy-first screen recorder that doesn&apos;t compromise on features
                 </p>
               </div>
 
