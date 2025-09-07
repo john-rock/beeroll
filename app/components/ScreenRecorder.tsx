@@ -7,7 +7,7 @@ import { downloadBlob, generateFilename, formatFileSize } from '../utils/fileDow
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
-import { Logo } from './Logo';
+import { Header } from './Header';
 import { Play, ChevronDown, Save, Settings, Zap } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
@@ -206,9 +206,7 @@ export function ScreenRecorder() {
       aria-label="Screen Recording Application"
     >
       {/* Header */}
-      <header className="container mx-auto px-4 py-4">
-        <Logo />
-      </header>
+      <Header />
 
       {hasRecordedVideo ? (
         // Show preview after recording
@@ -286,15 +284,6 @@ export function ScreenRecorder() {
 
               {/* Right Side - Recording Controls */}
               <div className="space-y-8">
-                {/* Instructions */}
-                {isInactive && (
-                  <div className="text-center lg:text-left">
-                    <p className="text-retro-muted dark:text-retro-muted">
-                      Click to start recording, or press <kbd className="px-2 py-1 bg-retro-warm-white dark:bg-retro-warm-white rounded text-retro-brown dark:text-retro-brown font-mono text-xs border border-retro-accent dark:border-retro-accent">R</kbd>
-                    </p>
-                  </div>
-                )}
-
                 {/* Recording Status */}
                 {isRecording && (
                   <div className="bg-gradient-to-r from-retro-warm-white to-retro-cream dark:from-retro-warm-white dark:to-retro-cream border-2 border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg">
@@ -309,18 +298,23 @@ export function ScreenRecorder() {
                 {/* Main Recording Button */}
                 <div className="space-y-4">
                   {isInactive && (
-                    <button
-                      onClick={handleStartRecording}
-                      className="group w-full bg-retro-orange hover:bg-retro-orange-hover text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-xl"
-                      disabled={isProcessing}
-                      data-plausible="start-recording"
-                      aria-label="Start screen recording"
-                    >
-                      <div className="flex items-center justify-center space-x-3">
-                        <Play className="w-6 h-6" aria-hidden="true" />
-                        <span>Start Recording</span>
-                      </div>
-                    </button>
+                    <div className="space-y-2">
+                      <button
+                        onClick={handleStartRecording}
+                        className="group w-full bg-retro-orange hover:bg-retro-orange-hover text-white font-bold py-6 px-8 rounded-lg transition-all duration-300 transform hover:shadow-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-xl"
+                        disabled={isProcessing}
+                        data-plausible="start-recording"
+                        aria-label="Start screen recording"
+                      >
+                        <div className="flex items-center justify-center space-x-3">
+                          <Play className="w-6 h-6" aria-hidden="true" />
+                          <span>Start Recording</span>
+                        </div>
+                      </button>
+                      <p className="text-center text-sm text-retro-muted dark:text-retro-muted">
+                        or press <kbd className="px-1.5 py-0.5 bg-retro-warm-white dark:bg-retro-warm-white rounded text-retro-brown dark:text-retro-brown font-mono text-xs border border-retro-accent dark:border-retro-accent">R</kbd>
+                      </p>
+                    </div>
                   )}
 
                   {isRecording && (
