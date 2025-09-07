@@ -60,9 +60,6 @@ export default function RootLayout({
       >
         <PlausibleProvider domain="beeroll.app" trackFileDownloads taggedEvents>
           <ThemeProvider>
-            <div className="fixed top-4 left-4 z-40">
-              <Logo />
-            </div>
             {children}
             <ThemeToggle />
           </ThemeProvider>

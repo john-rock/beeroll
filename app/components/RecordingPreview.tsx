@@ -223,7 +223,7 @@ export function RecordingPreview({
       <section className="flex space-x-3" aria-label="Recording Actions">
         <button
           onClick={handleDownload}
-          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform"
+          className="flex-1 bg-retro-orange hover:bg-retro-orange-hover text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform"
           aria-label="Download recording"
         >
           <Download className="w-5 h-5" aria-hidden="true" />
@@ -232,7 +232,7 @@ export function RecordingPreview({
 
         <button
           onClick={handleRerecord}
-          className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+          className="flex-1 bg-retro-accent hover:bg-retro-warm-brown text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
           aria-label="Start a new recording"
         >
           <RotateCcw className="w-5 h-5" aria-hidden="true" />
@@ -241,7 +241,7 @@ export function RecordingPreview({
 
         <button
           onClick={handleDelete}
-          className="bg-red-600 flex-1 space-x-2 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+          className="bg-retro-muted hover:bg-retro-warm-brown flex-1 space-x-2 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
           title="Delete recording"
           aria-label="Delete recording permanently"
         >

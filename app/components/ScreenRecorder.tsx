@@ -223,7 +223,10 @@ export function ScreenRecorder() {
         <div className="max-w-lg w-full space-y-8 relative">
           {/* Header */}
           <header className="text-center space-y-4">
-            <p className="text-lg text-retro-muted dark:text-retro-muted max-w-md mx-auto leading-relaxed transition-colors duration-300">
+            <h1 className="text-6xl font-bold text-retro-brown dark:text-retro-brown transition-all duration-300">
+              beeroll
+            </h1>
+            <p className="text-lg text-retro-muted dark:text-retro-muted mx-auto leading-relaxed transition-colors duration-300">
               Screen recording at 60fps. Local-first, private, instant.
             </p>
           </header>
