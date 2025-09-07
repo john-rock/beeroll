@@ -8,7 +8,7 @@ import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
 import { Header } from './Header';
-import { Play, ChevronDown, Save, Settings, Zap } from 'lucide-react';
+import { Play, ChevronDown, Save, Settings, Zap, Shield, Infinity, Globe, Camera, Code } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -579,9 +579,7 @@ export function ScreenRecorder() {
                 {/* Privacy First */}
                 <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
                   <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
+                    <Shield className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
                     100% Private
@@ -594,9 +592,7 @@ export function ScreenRecorder() {
                 {/* No Limits */}
                 <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
                   <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <Infinity className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
                     No Limits
@@ -609,9 +605,7 @@ export function ScreenRecorder() {
                 {/* Works Everywhere */}
                 <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
                   <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd" />
-                    </svg>
+                    <Globe className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
                     Works Everywhere
@@ -624,9 +618,7 @@ export function ScreenRecorder() {
                 {/* High Quality */}
                 <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
                   <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
-                    </svg>
+                    <Camera className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
                     Crystal Clear
@@ -639,9 +631,7 @@ export function ScreenRecorder() {
                 {/* Easy to Use */}
                 <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
                   <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-                    </svg>
+                    <Zap className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
                     Lightning Fast
@@ -654,9 +644,7 @@ export function ScreenRecorder() {
                 {/* Open Source */}
                 <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
                   <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
+                    <Code className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
                     Transparent
