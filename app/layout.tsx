@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Fraunces } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ThemeToggle } from "./components/ThemeToggle";
 import PlausibleProvider from 'next-plausible'
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
 });
 
@@ -54,7 +54,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${outfit.variable} antialiased`}
+        className={`${fraunces.variable} antialiased`}
         suppressHydrationWarning
       >
         <PlausibleProvider domain="beeroll.app" trackFileDownloads taggedEvents>
