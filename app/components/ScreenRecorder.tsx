@@ -8,7 +8,7 @@ import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
 import { Header } from './Header';
-import { Play, ChevronDown, Save, Settings, Zap, Shield, Infinity, Globe, Camera, Code } from 'lucide-react';
+import { Play, ChevronDown, Save, Settings, Zap, Shield, Infinity, Users, Camera, Code } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -275,8 +275,8 @@ export function ScreenRecorder() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-retro-brown dark:text-retro-brown">Works everywhere</h3>
-                      <p className="text-retro-muted dark:text-retro-muted text-sm">Chrome, Firefox, Safari, Edge - no downloads needed</p>
+                      <h3 className="font-semibold text-retro-brown dark:text-retro-brown">Easily sharable</h3>
+                      <p className="text-retro-muted dark:text-retro-muted text-sm">Output embeds for sharing in Slack, PR reviews, and more</p>
                     </div>
                   </div>
                 </div>
@@ -602,16 +602,16 @@ export function ScreenRecorder() {
                   </p>
                 </div>
 
-                {/* Works Everywhere */}
+                {/* Built for Teams */}
                 <div className="bg-retro-warm-white dark:bg-retro-warm-white rounded-lg p-8 shadow-lg border border-retro-accent dark:border-retro-accent hover:shadow-xl transition-all duration-300">
                   <div className="w-12 h-12 bg-retro-orange rounded-lg flex items-center justify-center mb-6">
-                    <Globe className="w-6 h-6 text-white" />
+                    <Users className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-retro-brown dark:text-retro-brown mb-3">
-                    Works Everywhere
+                    Built for Teams
                   </h3>
                   <p className="text-retro-muted dark:text-retro-muted leading-relaxed">
-                    Chrome, Firefox, Safari, Edge. No downloads, no installations, no compatibility issues.
+                    Perfect for code reviews, bug reports, and async communication. Works in every tool your team already uses.
                   </p>
                 </div>
 
