@@ -7,7 +7,7 @@ import { downloadBlob, generateFilename, formatFileSize } from '../utils/fileDow
 import { QualityPreset, AudioOptions } from '../types/recording';
 import { QUALITY_PRESETS, getSavedQualityPreset, saveQualityPreset } from '../utils/qualitySettings';
 import { AudioControls } from './AudioControls';
-import { Play, ChevronDown, Pause, RotateCw, Save, Settings, Zap } from 'lucide-react';
+import { Play, ChevronDown, Save, Settings, Zap } from 'lucide-react';
 
 import { RecordingStatus } from './RecordingStatus';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -39,8 +39,6 @@ export function ScreenRecorder() {
     error,
     startRecording,
     stopRecording,
-    pauseRecording,
-    resumeRecording,
     clearError,
   } = useScreenRecording();
 
@@ -63,7 +61,6 @@ export function ScreenRecorder() {
 
   // Memoized state computations for performance
   const isRecording = useMemo(() => recordingState === 'recording', [recordingState]);
-  const isPaused = useMemo(() => recordingState === 'paused', [recordingState]);
   const isInactive = useMemo(() => recordingState === 'inactive', [recordingState]);
   const hasRecordedVideo = useMemo(() => recordedVideo !== null, [recordedVideo]);
 
@@ -227,16 +224,15 @@ export function ScreenRecorder() {
               beeroll
             </h1>
             <p className="text-lg text-retro-muted dark:text-retro-muted mx-auto leading-relaxed transition-colors duration-300">
-              Screen recording at 60fps. Local-first, private, instant.
+            Record screens privately in your browser
             </p>
           </header>
 
           {/* Recording Status */}
-          {(isRecording || isPaused) && (
+          {isRecording && (
             <div className="bg-gradient-to-r from-retro-warm-white to-retro-cream dark:from-retro-warm-white dark:to-retro-cream border-2 border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg">
               <RecordingStatus 
                 isRecording={isRecording}
-                isPaused={isPaused}
                 duration={duration}
                 className="scale-110"
               />
@@ -270,76 +266,52 @@ export function ScreenRecorder() {
               </div>
             )}
 
-            {(isRecording || isPaused) && (
+            {isRecording && (
               <div className="space-y-4">
                 {/* Main Recording Controls */}
-                <div className="grid grid-cols-2 gap-3">
-                  {isRecording && (
-                    <button
-                      onClick={pauseRecording}
-                      className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-                      aria-label="Pause recording"
-                    >
-                      <Pause className="w-4 h-4" aria-hidden="true" />
-                      <span>Pause</span>
-                    </button>
+                <button
+                  onClick={handleStopRecording}
+                  disabled={isProcessing}
+                  className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform disabled:transform-none"
+                  aria-label="Stop recording and save"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
+                      <span>
+                        {compressionProgress ? compressionProgress.stage : 'Processing...'}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Save aria-hidden="true" />
+                      <span>Stop & Save</span>
+                    </>
                   )}
-
-                  {isPaused && (
-                    <button
-                      onClick={resumeRecording}
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-                      aria-label="Resume recording"
-                    >
-                      <RotateCw className="w-4 h-4" aria-hidden="true" />
-                      <span>Resume</span>
-                    </button>
-                  )}
-
-                  <button
-                    onClick={handleStopRecording}
-                    disabled={isProcessing}
-                    className="col-span-1 bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform disabled:transform-none"
-                    aria-label="Stop recording and save"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
-                        <span>
-                          {compressionProgress ? compressionProgress.stage : 'Processing...'}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Save aria-hidden="true" />
-                        <span>Stop & Save</span>
-                      </>
-                    )}
-                  </button>
-                </div>
+                </button>
               </div>
             )}
           </section>
 
           {/* Compression Progress */}
           {compressionProgress && (
-            <div className="bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-lg p-6 shadow-lg transition-all duration-300">
+            <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg transition-all duration-300">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
-                    <span className="text-indigo-700 dark:text-indigo-300 font-semibold">
+                    <div className="w-8 h-8 border-2 border-retro-orange border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
+                    <span className="text-retro-brown dark:text-retro-brown font-semibold">
                       {compressionProgress.stage}
                     </span>
                   </div>
-                  <span className="text-indigo-600 dark:text-indigo-400 text-lg font-bold">
+                  <span className="text-retro-orange dark:text-retro-orange text-lg font-bold">
                     {Math.round(compressionProgress.progress)}%
                   </span>
                 </div>
                 <div className="space-y-2">
-                  <div className="w-full bg-indigo-200 dark:bg-indigo-800 rounded-full h-3 shadow-inner">
+                  <div className="w-full bg-retro-muted/30 dark:bg-retro-muted/30 rounded-full h-3 shadow-inner">
                     <div 
-                      className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
+                      className="bg-gradient-to-r from-retro-orange to-retro-orange-hover h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
                       style={{ width: `${compressionProgress.progress}%` }}
                       role="progressbar"
                       aria-valuenow={compressionProgress.progress}
@@ -348,7 +320,7 @@ export function ScreenRecorder() {
                       aria-label="Compression progress"
                     />
                   </div>
-                  <p className="text-indigo-600 dark:text-indigo-400 text-sm text-center">
+                  <p className="text-retro-muted dark:text-retro-muted text-sm text-center">
                     Optimizing your recording for the best quality and file size...
                   </p>
                 </div>
@@ -358,32 +330,32 @@ export function ScreenRecorder() {
 
           {/* Compression Result */}
           {compressionResult && (
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-lg p-6 shadow-lg transition-all duration-300">
+            <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-accent dark:border-retro-accent rounded-lg p-6 shadow-lg transition-all duration-300">
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-retro-orange rounded-full flex items-center justify-center">
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <h4 className="text-green-700 dark:text-green-300 font-semibold text-lg">Compression Complete!</h4>
+                  <h4 className="text-retro-brown dark:text-retro-brown font-semibold text-lg">Compression Complete!</h4>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Original Size</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{formatFileSize(compressionResult.originalSize)}</div>
+                  <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                    <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Original Size</div>
+                    <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{formatFileSize(compressionResult.originalSize)}</div>
                   </div>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Compressed Size</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{formatFileSize(compressionResult.compressedSize)}</div>
+                  <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                    <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Compressed Size</div>
+                    <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{formatFileSize(compressionResult.compressedSize)}</div>
                   </div>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Space Saved</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{compressionResult.compressionRatio.toFixed(1)}%</div>
+                  <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                    <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Space Saved</div>
+                    <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{compressionResult.compressionRatio.toFixed(1)}%</div>
                   </div>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
-                    <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Processing Time</div>
-                    <div className="text-lg font-bold text-green-700 dark:text-green-300">{(compressionResult.processingTime / 1000).toFixed(1)}s</div>
+                  <div className="bg-retro-cream dark:bg-retro-cream rounded-lg p-3 border border-retro-accent dark:border-retro-accent">
+                    <div className="text-xs text-retro-muted dark:text-retro-muted font-medium mb-1">Processing Time</div>
+                    <div className="text-lg font-bold text-retro-brown dark:text-retro-brown">{(compressionResult.processingTime / 1000).toFixed(1)}s</div>
                   </div>
                 </div>
               </div>
@@ -399,22 +371,22 @@ export function ScreenRecorder() {
 
           {/* Compatibility Warnings */}
           {compatibilityIssues.length > 0 && (
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-6 shadow-lg transition-all duration-300">
+            <div className="bg-retro-warm-white dark:bg-retro-warm-white border border-retro-orange dark:border-retro-orange rounded-lg p-6 shadow-lg transition-all duration-300">
               <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-retro-orange rounded-full flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-yellow-700 dark:text-yellow-300 mb-3">
+                  <h3 className="text-lg font-semibold text-retro-brown dark:text-retro-brown mb-3">
                     Browser Compatibility Notice
                   </h3>
                   <ul className="space-y-2">
                     {compatibilityIssues.map((issue, index) => (
                       <li key={index} className="flex items-start space-x-2">
-                        <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></span>
-                        <span className="text-sm text-yellow-600 dark:text-yellow-400 leading-relaxed">{issue}</span>
+                        <span className="w-1.5 h-1.5 bg-retro-orange rounded-full mt-2 flex-shrink-0"></span>
+                        <span className="text-sm text-retro-muted dark:text-retro-muted leading-relaxed">{issue}</span>
                       </li>
                     ))}
                   </ul>
