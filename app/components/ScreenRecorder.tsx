@@ -275,8 +275,8 @@ export function ScreenRecorder() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-retro-brown dark:text-retro-brown">Easily sharable</h3>
-                      <p className="text-retro-muted dark:text-retro-muted text-sm">Output embeds for sharing in Slack, PR reviews, and more</p>
+                      <h3 className="font-semibold text-retro-brown dark:text-retro-brown">Built for teams</h3>
+                      <p className="text-retro-muted dark:text-retro-muted text-sm">Perfect for code reviews, bug reports, and async communication</p>
                     </div>
                   </div>
                 </div>
